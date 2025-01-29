@@ -3,7 +3,7 @@ import json
 import io
 
 positionData = []
-doc = aw.Document("./generateDoc/demo.docx")
+doc = aw.Document("./demo.docx")
 
 # Use LayoutCollector and LayoutEnumerator to calculate coordinates of the shapes.
 collector = aw.layout.LayoutCollector(doc)
@@ -31,7 +31,7 @@ for s in shapes :
     positionData.append([rect.left, rect.top, rect.width, rect.height, enumerator.page_index])
 
     # open template(.json file)
-with open('./generateDoc/mockupTemplate.json', 'r', encoding="utf-8") as file:
+with open('./mockupTemplate.json', 'r', encoding="utf-8") as file:
     jsonContent = json.load(file)
 
 questionIndex = 0
@@ -46,5 +46,5 @@ for question in jsonContent["questions"]:
 
 jsonText = str(jsonContent).replace('\'', '"')
 
-with io.open("./generateDoc/modifiedMockupTemplate.json", 'w', encoding="utf-8") as file:
+with io.open("./modifiedMockupTemplate.json", 'w', encoding="utf-8") as file:
     file.write(jsonText)

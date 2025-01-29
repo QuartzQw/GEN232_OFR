@@ -8,25 +8,25 @@ def create_choice_inform(runChoices ,choice, att):
 
     # varies choice behavior for different input area in docx 
     if choiceType == "checkBox":
-        runChoices.add_picture("./generateDoc/circle.jpg", width=Inches(0.12))
+        runChoices.add_picture("./circle.jpg", width=Inches(0.12))
         runChoices.add_text(f" {choice}")
         runChoices.add_text("            ")
     elif choiceType == "checkBoxWithText":
-        runChoices.add_picture("./generateDoc/circle.jpg", width=Inches(0.12))
+        runChoices.add_picture("./circle.jpg", width=Inches(0.12))
         runChoices.add_text(f" {choice} ")
-        runChoices.add_picture("./generateDoc/grayBox.jpg", width=Inches(1), height = Inches(0.25))
+        runChoices.add_picture("./grayBox.jpg", width=Inches(1), height = Inches(0.25))
         runChoices.add_text("            ")
     elif choiceType == "text":
         runChoices.add_text(f" {choice} ")
-        runChoices.add_picture("./generateDoc/grayBox.jpg", width=Inches(1), height = Inches(0.25))
+        runChoices.add_picture("./grayBox.jpg", width=Inches(1), height = Inches(0.25))
         runChoices.add_text("    ")
     elif choiceType == "longText":
         runChoices.add_text(f" {choice} ")
-        runChoices.add_picture("./generateDoc/grayBox.jpg", width=Inches(3), height = Inches(0.25))
+        runChoices.add_picture("./grayBox.jpg", width=Inches(3), height = Inches(0.25))
         runChoices.add_text("    ")
     elif choiceType == "number":
         runChoices.add_text(f" {choice} ")
-        runChoices.add_picture("./generateDoc/grayBox.jpg", width=Inches(1), height = Inches(0.25))
+        runChoices.add_picture("./grayBox.jpg", width=Inches(1), height = Inches(0.25))
         runChoices.add_text(f' {att["unit"]}   ')
     
 
@@ -65,7 +65,7 @@ for sec in sections:
 headingList = []
 
 # open template(.json file)
-with open('./generateDoc/mockupTemplate.json', 'r', encoding="utf-8") as file:
+with open('./mockupTemplate.json', 'r', encoding="utf-8") as file:
     jsonContent = json.load(file)
 
 # extract section and sub-section data
@@ -91,6 +91,6 @@ for question in jsonContent["questions"]:
     create_question_in_form(question)
 
 
-document.save('./generateDoc/demo.docx')
+document.save('./demo.docx')
 
 
