@@ -1,0 +1,352 @@
+{
+    "templateName": "Survey on Multidimensional Poverty Index",
+    "lastModified": "2025-01-18",
+    "sectionProperties": [
+        {
+            "sectionName": "ข้อมูลทั่วไป",
+            "subSection": [
+                "-"
+            ]
+        },
+        {
+            "sectionName": "ข้อมูลการผลิตอาหารโปรตีน",
+            "subSection": [
+                "-"
+            ]
+        },
+        {
+            "sectionName": "ข้อมูลนักเรียนที่มีปัญหาภาษาไทย",
+            "subSection": [
+                "-"
+            ]
+        },
+        {
+            "sectionName": "ข้อมูลกลุ่มเปราะบางด้านสุขภาพ",
+            "subSection": [
+                "-"
+            ]
+        },
+        {
+            "sectionName": "ข้อมูลระบบพลังงานไฟฟ้าในครัวเรือน",
+            "subSection": [
+                "-"
+            ]
+        }
+    ],
+    "questions": [
+        {
+            "section": 1,
+            "subSection": 1,
+            "question_order": 1,
+            "question": "ข้อมูลหัวหน้าครอบครัว",
+            "choices": {
+                "ชื่อ-สกุล": {
+                    "choiceOrder": 1,
+                    "choiceType": "longText",
+                    "x": 64.46800231933594,
+                    "y": 217.5709991455078,
+                    "width": 216.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อายุ": {
+                    "choiceOrder": 2,
+                    "choiceType": "number",
+                    "unit": "ปี",
+                    "x": 308.6400146484375,
+                    "y": 217.5709991455078,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "บ้านเลขที่": {
+                    "choiceOrder": 3,
+                    "choiceType": "text",
+                    "x": 437.2829895019531,
+                    "y": 217.5709991455078,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "หย่อมบ้าน": {
+                    "choiceOrder": 4,
+                    "choiceType": "text",
+                    "x": 28.350000381469727,
+                    "y": 244.14599609375,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "หมู่ที่": {
+                    "choiceOrder": 5,
+                    "choiceType": "number",
+                    "unit": "",
+                    "x": 132.93099975585938,
+                    "y": 244.14599609375,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "หมู่บ้าน": {
+                    "choiceOrder": 6,
+                    "choiceType": "text",
+                    "x": 247.94000244140625,
+                    "y": 244.14599609375,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "ตำบล": {
+                    "choiceOrder": 7,
+                    "choiceType": "text",
+                    "x": 355.2349853515625,
+                    "y": 244.14599609375,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อำเภอ": {
+                    "choiceOrder": 8,
+                    "choiceType": "text",
+                    "x": 464.2690124511719,
+                    "y": 244.14599609375,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "จังหวัด": {
+                    "choiceOrder": 9,
+                    "choiceType": "text",
+                    "x": 28.350000381469727,
+                    "y": 270.72100830078125,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "ศาสนา": {
+                    "choiceOrder": 10,
+                    "choiceType": "text",
+                    "x": 140.24899291992188,
+                    "y": 270.72100830078125,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                }
+            },
+            "type": "multipleText"
+        },
+        {
+            "section": 1,
+            "subSection": 1,
+            "question_order": 2,
+            "question": "ข้อมูลจำนวนสมาชิกในครอบครัวแบ่งตามช่วงอายุ",
+            "choices": {
+                "อายุ 0-5 ปี": {
+                    "choiceOrder": 1,
+                    "choiceType": "number",
+                    "unit": "คน",
+                    "x": 70.51899719238281,
+                    "y": 342.77899169921875,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อายุ 6-9 ปี": {
+                    "choiceOrder": 2,
+                    "choiceType": "number",
+                    "unit": "คน",
+                    "x": 205.9409942626953,
+                    "y": 342.77899169921875,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อายุ 10-20 ปี": {
+                    "choiceOrder": 3,
+                    "choiceType": "number",
+                    "unit": "คน",
+                    "x": 350.6059875488281,
+                    "y": 342.77899169921875,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อายุ 21-34 ปี": {
+                    "choiceOrder": 4,
+                    "choiceType": "number",
+                    "unit": "คน",
+                    "x": 495.27099609375,
+                    "y": 342.77899169921875,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อายุ 35-59 ปี": {
+                    "choiceOrder": 5,
+                    "choiceType": "number",
+                    "unit": "คน",
+                    "x": 77.45099639892578,
+                    "y": 369.35400390625,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "อายุ 60 ปีขึ้นไป": {
+                    "choiceOrder": 6,
+                    "choiceType": "number",
+                    "unit": "คน",
+                    "x": 232.92300415039062,
+                    "y": 369.35400390625,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                }
+            },
+            "type": "multipleText"
+        },
+        {
+            "section": 1,
+            "subSection": 1,
+            "question_order": 3,
+            "question": "อาชีพ (เลือกได้มากกว่า 1 ข้อ)",
+            "choices": {
+                "ทำนา": {
+                    "choiceOrder": 1,
+                    "choiceType": "checkBox",
+                    "x": 28.350000381469727,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "ทำสวน": {
+                    "choiceOrder": 2,
+                    "choiceType": "checkBox",
+                    "x": 87.7040023803711,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "ทำไร่": {
+                    "choiceOrder": 3,
+                    "choiceType": "checkBox",
+                    "x": 154.18499755859375,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "ปศุสัตว์ (ควาย/วัว/หมู/ไก่)": {
+                    "choiceOrder": 4,
+                    "choiceType": "checkBox",
+                    "x": 212.71600341796875,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "รับจ้างทั่วไป": {
+                    "choiceOrder": 5,
+                    "choiceType": "checkBox",
+                    "x": 348.010009765625,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "ค้าขาย": {
+                    "choiceOrder": 6,
+                    "choiceType": "checkBox",
+                    "x": 433.4739990234375,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "พนักงานภาครัฐ": {
+                    "choiceOrder": 7,
+                    "choiceType": "checkBox",
+                    "x": 496.03399658203125,
+                    "y": 441.4119873046875,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "อื่น ๆ โปรดระบุ": {
+                    "choiceOrder": 8,
+                    "choiceType": "checkBoxWithText",
+                    "x": 28.350000381469727,
+                    "y": 463.1600036621094,
+                    "width": 8.600000381469727,
+                    "height": 23.73900032043457,
+                    "page": 1
+                }
+            },
+            "type": "multipleCheckBoxWithText"
+        },
+        {
+            "section": 1,
+            "subSection": 1,
+            "question_order": 4,
+            "question": "รายได้ของครอบครัวต่อปี",
+            "choices": {
+                "ต่ำกว่า 10000 บาท": {
+                    "choiceOrder": 1,
+                    "choiceType": "checkBox",
+                    "x": 101.67500305175781,
+                    "y": 463.1600036621094,
+                    "width": 72.0,
+                    "height": 23.73900032043457,
+                    "page": 1
+                },
+                "10000 - 14999 บาท": {
+                    "choiceOrder": 2,
+                    "choiceType": "checkBox",
+                    "x": 28.350000381469727,
+                    "y": 535.218017578125,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "15000 - 19999 บาท": {
+                    "choiceOrder": 3,
+                    "choiceType": "checkBox",
+                    "x": 135.39199829101562,
+                    "y": 535.218017578125,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "20000 - 24999 บาท": {
+                    "choiceOrder": 4,
+                    "choiceType": "checkBox",
+                    "x": 246.83599853515625,
+                    "y": 535.218017578125,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "25000 - 29999 บาท": {
+                    "choiceOrder": 5,
+                    "choiceType": "checkBox",
+                    "x": 358.2799987792969,
+                    "y": 535.218017578125,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                },
+                "มากกว่า 30000 บาท": {
+                    "choiceOrder": 6,
+                    "choiceType": "checkBox",
+                    "x": 469.7239990234375,
+                    "y": 535.218017578125,
+                    "width": 8.600000381469727,
+                    "height": 18.91200065612793,
+                    "page": 1
+                }
+            },
+            "type": "singleCheckBox"
+        }
+    ]
+}
