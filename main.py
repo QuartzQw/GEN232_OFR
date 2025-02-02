@@ -3,16 +3,33 @@ from tkinter import ttk
 from tkinter import filedialog
 import glob
 import os
+import pandas as pd
+from datetime import datetime
+from fahFunction import process_survey
 
 templateDict = {}
 
 def getFilePath(entry):
-    entry.delete(0,END)
-    templateTextBox.delete(1.0, END)
-    templateDir = filedialog.askopenfilename(filetypes = [('JSON', '.json')], initialdir='./')
+    """ เปิดไฟล์ JSON และแสดงเนื้อหา """
+    entry.delete(0, END)
+    if 'templateTextBox' in globals() and templateTextBox:
+        templateTextBox.delete(1.0, END)
+    
+    templateDir = filedialog.askopenfilename(filetypes=[('JSON', '.json')], initialdir='./')
     entry.insert(0, templateDir)
-    jsonContent = open(templateDir, encoding="utf8").read()
-    templateTextBox.insert(2.0, jsonContent)
+    
+    if templateDir:
+        with open(templateDir, encoding="utf8") as file:
+            jsonContent = file.read()
+        if templateTextBox:
+            templateTextBox.insert(2.0, jsonContent)
+# def getFilePath(entry):
+#     entry.delete(0,END)
+#     templateTextBox.delete(1.0, END)
+#     templateDir = filedialog.askopenfilename(filetypes = [('JSON', '.json')], initialdir='./')
+#     entry.insert(0, templateDir)
+#     jsonContent = open(templateDir, encoding="utf8").read()
+#     templateTextBox.insert(2.0, jsonContent)
 
 def getFolderPath(entry):
     entry.delete(0,END)
@@ -31,8 +48,31 @@ def getEntriesValues(*entries):
     return entryRecord
 
 def readMainPage(entryCoordTemplate, entryTargetFolder):
-    templateDir, folderDir = getEntriesValues(entryCoordTemplate, entryTargetFolder)
-    print(open(templateDir, encoding="utf8").read())
+    """ อ่านข้อมูลจาก JSON และประมวลผลภาพ """
+    templateDir, folderDir = entryCoordTemplate.get(), entryTargetFolder.get()
+    
+    if not os.path.exists(templateDir):
+        print("ไม่พบไฟล์ JSON กรุณาเลือกใหม่")
+        return
+
+    if not os.path.exists(folderDir):
+        print("ไม่พบโฟลเดอร์รูปภาพ กรุณาเลือกใหม่")
+        return
+
+    # สร้างโฟลเดอร์สำหรับเก็บไฟล์ Excel
+    excel_folder = "ProjectGEN/P-Pond/GEN232_OFR/excelCollector/"
+    if not os.path.exists(excel_folder):
+        os.makedirs(excel_folder)
+    
+    # กำหนดชื่อไฟล์ Excel ตามวันที่ปัจจุบัน
+    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    output_excel = os.path.join(excel_folder, f"SurveyOnMultidimensionalPovertyIndex_{current_time}.xlsx")
+
+    process_survey(folderDir, templateDir, output_excel)
+
+# def readMainPage(entryCoordTemplate, entryTargetFolder):
+#     templateDir, folderDir = getEntriesValues(entryCoordTemplate, entryTargetFolder)
+#     print(open(templateDir, encoding="utf8").read())
     # os.system('.\generate"')
     ## print all file names in folderDir
 
@@ -94,6 +134,10 @@ subTabTemplate = Menu()
 # subTabTemplate.add_command(label = "embed coord to docx")
 
 tab.add_cascade(label="Template", menu = subTabTemplate)
+#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+templateTextBox = Text(root, width=40, height=10)
+templateTextBox.place(x=40, y=100)
+#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 entryCoordTemplate = Entry(root, width = 70)
 entryCoordTemplate.place(x = 250, y = 10)
