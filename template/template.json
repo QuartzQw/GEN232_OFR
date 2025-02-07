@@ -1,0 +1,362 @@
+{
+  "templateName": "Survey on Multidimensional Poverty Index",
+  "lastModified": "2025-01-18",
+  "sectionProperties": [
+    {
+      "sectionName": "ข้อมูลทั่วไป",
+      "subSection": [
+        ""
+      ]
+    },
+    {
+      "sectionName": "ข้อมูลการผลิตอาหารโปรตีน",
+      "subSection": [
+        "การเลี้ยงไก่",
+        "การเลี้ยงหมูดำ",
+        "การใช้ไก่พื้นเมืองในรอบปี",
+        "การใช้หมูดำในรอบปี"
+      ]
+    },
+    {
+      "sectionName": "ข้อมูลนักเรียนที่มีปัญหาภาษาไทย",
+      "subSection": [
+        "ข้อมูลการเรียนรู้ภาษาไทยของบุตรหลานอายุ 6-9 ปี"
+      ]
+    },
+    {
+      "sectionName": "ข้อมูลกลุ่มเปราะบางด้านสุขภาพ",
+      "subSection": [
+        "หญิงตั้งครรภ์",
+        "เด็กอายุ 0-5 ปี",
+        "ผู้ป่วยเรื้อรัง/กลุ่มเสี่ยง",
+        "ผู้สูงอายุ",
+        "ผู้พิการ",
+        "ผู้ป่วยติดเตียง"
+      ]
+    },
+    {
+      "sectionName": "ข้อมูลระบบพลังงานไฟฟ้าในครัวเรือน",
+      "subSection": [
+        ""
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "section": 1,
+      "subSection": 1,
+      "questionOrder": 1,
+      "question": "ข้อมูลหัวหน้าครอบครัว",
+      "questionType": "multipleText",
+      "choices": [
+        {
+          "choice": "ชื่อ",
+          "choiceType": "text"
+        },
+        {
+          "choice": "สกุล",
+          "choiceType": "text"
+        },
+        {
+          "choice": "อายุ",
+          "choiceType": "number",
+          "unit": "ปี"
+        },
+        {
+          "choice": "บ้านเลขที่",
+          "choiceType": "text"
+        },
+        {
+          "choice": "หย่อมบ้าน",
+          "choiceType": "text"
+        },
+        {
+          "choice": "หมู่ที่",
+          "choiceType": "number",
+          "unit": ""
+        },
+        {
+          "choice": "หมู่บ้าน",
+          "choiceType": "text"
+        },
+        {
+          "choice": "ตำบล",
+          "choiceType": "text"
+        },
+        {
+          "choice": "อำเภอ",
+          "choiceType": "text"
+        },
+        {
+          "choice": "จังหวัด",
+          "choiceType": "text"
+        },
+        {
+          "choice": "ศาสนา",
+          "choiceType": "text"
+        }
+      ]
+    },
+    {
+      "section": 1,
+      "subSection": 1,
+      "questionOrder": 2,
+      "question": "ข้อมูลสมาชิกในครอบครัว",
+      "questionType": "multipleText",
+      "choices": [
+        {
+          "choice": "จำนวนสมาชิกในครอบครัว",
+          "choiceType": "number",
+          "unit": "คน"
+        },
+        {
+          "choice": "อายุ 0-5 ปี",
+          "choiceType": "number",
+          "unit": "คน"
+        },
+        {
+          "choice": "อายุ 6-9 ปี",
+          "choiceType": "number",
+          "unit": "คน"
+        },
+        {
+          "choice": "อายุ 10-20 ปี",
+          "choiceType": "number",
+          "unit": "คน"
+        },
+        {
+          "choice": "อายุ 21-34 ปี",
+          "choiceType": "number",
+          "unit": "คน"
+        },
+        {
+          "choice": "อายุ 35-59 ปี",
+          "choiceType": "number",
+          "unit": "คน"
+        },
+        {
+          "choice": "อายุ อายุ 60 ปีขึ้นไป",
+          "choiceType": "number",
+          "unit": "คน"
+        }
+      ]
+    },
+    {
+      "section": 1,
+      "subSection": 1,
+      "questionOrder": 3,
+      "question": "อาชีพของครอบครัว",
+      "questionType": "multipleChoice",
+      "choices": [
+        {
+          "choice": "ทำนา",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ทำสวน",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ทำไร่",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ปศุสัตว์",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "รับจ้างทั่วไป",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ค้าขาย",
+          "choiceOrder": 6,
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "พนักงานภาครัฐ",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "อื่น ๆ",
+          "choiceType": "checkBoxWithText"
+        }
+      ]
+    },
+    {
+      "section": 1,
+      "subSection": 1,
+      "questionOrder": 4,
+      "question": "รายได้เฉลี่ยของครอบครัวต่อปี",
+      "questionType": "singleChoice",
+      "choices": [
+        {
+          "choice": "มากกว่า 30,000 บาท",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "25,000 - 30,000 บาท",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "20,000 - 24,000 บาท",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "15,000 - 19,000 บาท",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "10,000 - 14,000 บาท",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ต่ำกว่า 10,000 บาท",
+          "choiceType": "checkBox"
+        }
+      ]
+    },{
+      "section": 2,
+      "subSection":1,
+      "questionOrder": 1,
+      "question": "ข้อมูลการเลี้ยงไก่",
+      "questionType": "multipleChoice",
+      "choices": [
+        {
+          "choice":"จำนวนแม่พันธุ์",
+          "choiceType": "number",
+          "unit": "ตัว"
+        },
+        {
+          "choice":"จำนวนพ่อพันธุ์",
+          "choiceType": "number",
+          "unit": "ตัว"
+        },
+        {
+          "choice":"จำนวนลูกไก่",
+          "choiceType": "number",
+          "unit": "ตัว/ปี"
+        }
+      ]
+    },{
+      "section": 2,
+      "subSection":1,
+      "questionOrder": 2,
+      "question": "อาหารที่ใช้สำหรับเลี้ยงไก่",
+      "questionType": "multipleChoice",
+      "choices": [
+        {
+          "choice":"อาหารสำเร็จรูป",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"ข้าวเปลือก",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"ปลายข้าว",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"รำหยาบ",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"รำละเอียด",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"ข้าวโพด",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"มันสำปะหลัง",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"ถั่ว",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice":"อื่น ๆ",
+          "choiceType": "checkBoxWithText"
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "subSection": 1,
+      "questionOrder": 3,
+      "question": "แหล่งที่มาของอาหารสำหรับเลี้ยงไก่",
+      "questionType": "singleChoice",
+      "choices": [
+        {
+          "choice": "ผลิตเอง",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "หาในป่า",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ซื้อ",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "อื่น ๆ",
+          "choiceType": "checkBoxWithText"
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "subSection": 1,
+      "questionOrder": 4,
+      "question": "ความสามารถในการผลิตอาหารสำหรับเลี้ยงไก่",
+      "questionType": "singleChoice",
+      "choices": [
+        {
+          "choice": "ผลิตเอง เพียงพอ",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ผลิตเอง ไม่เพียงพอ ต้องหาเพิ่มในป่า",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ผลิตเอง ไม่เพียงพอ ต้องซื้อเพิ่ม",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ไม่ได้ผลิตเอง หาจากป่า",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ไม่ได้ผลิตเอง ต้องซื้อเพิ่ม",
+          "choiceType": "checkBox"
+        }
+      ]
+    },
+    {
+      "section": 2,
+      "subSection": 1,
+      "questionOrder": 5,
+      "question": "แหล่งที่ซื้ออาหารสำหรับเลี้ยงไก่(ถ้าซื้ออาหาร)",
+      "questionType": "singleChoice",
+      "choices": [
+        {
+          "choice": "ในหมู่บ้าน",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "หมู่บ้านใกล้เคียง",
+          "choiceType": "checkBox"
+        },
+        {
+          "choice": "ในเมือง (แม่สะเรียง/แม่ลาน้อย/สบเมย/อมก๋อย)",
+          "choiceType": "checkBox"
+        }
+      ]
+    }
+  ]
+}

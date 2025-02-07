@@ -60,7 +60,7 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
         return
 
     # สร้างโฟลเดอร์สำหรับเก็บไฟล์ Excel
-    excel_folder = "ProjectGEN/P-Pond/GEN232_OFR/excelCollector/"
+    excel_folder = "./excelCollector"
     if not os.path.exists(excel_folder):
         os.makedirs(excel_folder)
     
