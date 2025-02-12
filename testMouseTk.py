@@ -5,7 +5,9 @@ from testAutoTrack import scan
 ix = -1
 iy = -1
 coords = []
+realCoords = []
 drawStat = False
+resolutionValue = 0
 
 app = Tk()
 Scrollbar(app).pack(side = RIGHT, fill= Y)
@@ -15,21 +17,41 @@ winHeight = height-100
 app.geometry(f"{winWidth}x{winHeight}+0+0")
 formHeight = winHeight-50
 
+def searchRect(x, y):
+    for i, rect in enumerate(coords):
+        if (rect[0] <= x <= rect[2] and rect[1] <= y <= rect[3]):
+            return i, rect
+    return -1, 0
+
+def drawAllRect(coords):
+    for rect in coords:
+        formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
+
 def get_xy(event):
     global ix, iy, coords, drawStat
 
-    if drawStat == False:
-        ix = event.x 
-        iy = event.y 
-        drawStat = True
-    else:
-        coords.append([ix, iy, event.x, event.y])
+    index, rect = searchRect(event.x, event.y)
+    if index >= 0:
         drawStat = False
-    for rect in coords:
-        print(coords)
-        formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
+        drawAllRect(coords)
+
+        # draw select box
+        formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1, outline='red')
+        
+    else:
+        if drawStat == False:
+            ix = event.x 
+            iy = event.y 
+            drawStat = True
+        else:
+            coords.append([ix, iy, event.x, event.y])
+            drawStat = False
+            drawAllRect(coords)
 
 def del_element(event):
+    global drawStat
+
+    drawStat = False
     formCanv.create_image(10,10, image = image, anchor = "nw")
     idxToDel = -1
     for i, rect in enumerate(coords):
@@ -37,18 +59,32 @@ def del_element(event):
             idxToDel = i
         else:
             formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
-    del coords[idxToDel]
+    if (idxToDel != -1): del coords[idxToDel] 
 
 def autoDetectPress(imgPath, imgWidth, imgHeight):
-    # print(blockSize.get(), cVal.get(), minArea.get())
-    # print(param1.get(), param2.get(), minRad.get(), maxRad.get(), minDist.get())
-    scan(filePath = imgPath,
+    global realCoords, resolutionValue, coords
+    
+    blockSizeValue = blockSize.get()
+    cValue = cVal.get()
+    minAreaValue = minArea.get()
+    resolutionValue = resolution.get()
+
+    realCoords = scan(filePath = imgPath,
          imgHeight = imgHeight,
          imgWidth = imgWidth,
-         blockSize = blockSize.get(),
-         cVal = cVal.get(),
-         minArea = minArea.get(),
-         resolution = resolution.get())
+         blockSize = blockSizeValue,
+         cVal = cValue,
+         minArea = minAreaValue,
+         resolution = resolutionValue)
+     
+     # transform rect 
+    coords = [[coord//resolutionValue+10 for coord in rect[0:4]] + [rect[4]] for rect in realCoords]
+    # print(coords)
+
+    formCanv.create_image(10,10, image = image, anchor = "nw")
+
+    for rect in coords:
+       formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
 
 formCanv = Canvas(app)
 formCanv.pack(anchor="nw")

@@ -1,6 +1,7 @@
 import cv2 
 import numpy as np 
 import argparse
+
   
 def scan(filePath, **kwargs):
 
@@ -42,15 +43,10 @@ def scan(filePath, **kwargs):
             ratio = w/h
             if (1.1 >= ratio >= 0.9): 
                 coords.append([x,y,x+w,y+h,"checkBox"])
-                cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,12), 2)
+                # cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,12), 2)
             elif(ratio >= 1.5):
                 coords.append([x,y,x+w,y+h,"text"])
-                cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
+                # cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
 
-    
-    img = cv2.resize(
-            img, 
-            (kwargs["imgWidth"], kwargs["imgHeight"]),
-            interpolation = cv2.INTER_AREA)
-    cv2.imshow("Detected Circle", img) 
-    cv2.waitKey(0) 
+    return coords
+
