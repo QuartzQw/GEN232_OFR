@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from testAutoTrack import scan
+from autoTrack import scan, cropToPath
 
 ix = -1
 iy = -1
@@ -86,13 +86,17 @@ def autoDetectPress(imgPath, imgWidth, imgHeight):
     for rect in coords:
        formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
 
+def cropPress(imgPath, imgWidth, imgHeight, realCoords, resolution):
+    cropToPath(imgPath, imgWidth, imgHeight, realCoords, resolution)
+
+
 formCanv = Canvas(app)
 formCanv.pack(anchor="nw")
 
 formCanv.bind("<Button-1>", get_xy)
 formCanv.bind("<Button-3>", del_element)
 
-imgPath = "./data/Survey on Multidimensional Poverty Index_page-0003.jpg"
+imgPath = "./data/demo3.jpg"
 img = Image.open(imgPath)
 scaleFactor = formHeight/img.height
 formWidth = int(img.width * scaleFactor)
@@ -130,6 +134,8 @@ resolution.set(3)
 
 autoDetect = Button(app, text="Auto detect", command=lambda:autoDetectPress(imgPath=imgPath, imgWidth=formWidth, imgHeight= formHeight))
 autoDetect.place(x = xAuto, y = yAuto + 180)
+autoDetect = Button(app, text="CROP!!!!!!!", command=lambda:cropPress(imgPath, imgWidth=formWidth, imgHeight= formHeight, realCoords = realCoords, resolution = resolutionValue))
+autoDetect.place(x = xAuto+200, y = yAuto + 180)
 
 app.mainloop()
 

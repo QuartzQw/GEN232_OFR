@@ -2,7 +2,6 @@ import cv2
 import numpy as np 
 import argparse
 
-  
 def scan(filePath, **kwargs):
 
     coords = []
@@ -49,4 +48,19 @@ def scan(filePath, **kwargs):
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
 
     return coords
+
+def cropToPath(imgPath, imgWidth, imgHeight, realCoords, resolution):
+
+    image = cv2.imread(imgPath, cv2.IMREAD_COLOR)
+    img = cv2.resize(
+        image, 
+        (imgWidth * resolution, imgHeight * resolution),
+        interpolation = cv2.INTER_AREA
+        )
+    
+    i = 0
+    for rect in realCoords:
+        if rect[4] == "text":
+            i += 1
+            cv2.imwrite(f"./imageForTesting/{i}.png", img[rect[1]: rect[3], rect[0]: rect[2]])
 
