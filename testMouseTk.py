@@ -92,7 +92,7 @@ formCanv.pack(anchor="nw")
 formCanv.bind("<Button-1>", get_xy)
 formCanv.bind("<Button-3>", del_element)
 
-imgPath = "./data/demo3.jpg"
+imgPath = "./data/Survey on Multidimensional Poverty Index_page-0003.jpg"
 img = Image.open(imgPath)
 scaleFactor = formHeight/img.height
 formWidth = int(img.width * scaleFactor)
@@ -125,8 +125,8 @@ resolution.place(x=xAuto + 80, y= yAuto+140)
 
 blockSize.set(141)
 cVal.set(7)
-minArea.set(100)
-resolution.set(2)
+minArea.set(135)
+resolution.set(3)
 
 autoDetect = Button(app, text="Auto detect", command=lambda:autoDetectPress(imgPath=imgPath, imgWidth=formWidth, imgHeight= formHeight))
 autoDetect.place(x = xAuto, y = yAuto + 180)

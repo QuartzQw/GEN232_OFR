@@ -6,6 +6,7 @@ from docx.enum.text import WD_LINE_SPACING
 
 def create_choice_inform(runChoices, choiceDict):
     choiceType = choiceDict["choiceType"]
+    # print(choiceType)
     choice = choiceDict["choice"] 
     # varies choice behavior for different input area in docx 
     if choiceType == "checkBox":
@@ -34,6 +35,7 @@ def create_choice_inform(runChoices, choiceDict):
 def create_question_in_form(question):
 
     # add question text to document
+    # print(question["question"])
     questionLine = document.add_paragraph(f'{question["question"]}')
     questionLine.style.font.size = Pt(16)
     questionLine.style.font.bold = True
@@ -66,9 +68,10 @@ for sec in sections:
 
 # handle unknow heading
 headingList = []
+subHeadingList = []
 
 # open template(.json file)
-with open('../template/template.json', 'r', encoding="utf-8") as file:
+with open('../template/template_all.json', 'r', encoding="utf-8") as file:
     jsonContent = json.load(file)
 
 # extract section and sub-section data
@@ -90,6 +93,12 @@ for question in jsonContent["questions"]:
     if sectionNo not in headingList:
         headingList.append(sectionNo)
         document.add_heading(f"ส่วนที่ {sectionNo}: {sectionName}", level=0)
+        subHeadingList = []
+    
+    if subSectionNo not in subHeadingList:
+        document.add_heading(f"ส่วนที่ {subSectionNo}: {subSection}", level=1)
+        subHeadingList.append(subSectionNo)
+
 
     # add question to the form, behaviour may varies from type of question
     create_question_in_form(question)
