@@ -68,4 +68,4 @@ def process_survey(image_folder, json_path, output_file):
     
     df = pd.DataFrame(all_data)
     df.to_excel(output_file, index=False)
-    print(f"✅ File saved at: {output_file}")
+    print(f"File saved at: {output_file}")

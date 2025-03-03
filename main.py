@@ -3,9 +3,11 @@ from tkinter import ttk
 from tkinter import filedialog
 import glob
 import os
+from PIL import Image, ImageTk
 import pandas as pd
 from datetime import datetime
-from fahFunction import process_survey
+from showimg import ImageViewer
+from saveToExcel import process_survey
 
 templateDict = {}
 
@@ -23,13 +25,6 @@ def getFilePath(entry):
             jsonContent = file.read()
         if templateTextBox:
             templateTextBox.insert(2.0, jsonContent)
-# def getFilePath(entry):
-#     entry.delete(0,END)
-#     templateTextBox.delete(1.0, END)
-#     templateDir = filedialog.askopenfilename(filetypes = [('JSON', '.json')], initialdir='./')
-#     entry.insert(0, templateDir)
-#     jsonContent = open(templateDir, encoding="utf8").read()
-#     templateTextBox.insert(2.0, jsonContent)
 
 def getFolderPath(entry):
     entry.delete(0,END)
@@ -60,7 +55,7 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
         return
 
     # สร้างโฟลเดอร์สำหรับเก็บไฟล์ Excel
-    excel_folder = "./excelCollector"
+    excel_folder = "./GEN232_OFR/excelCollector"
     if not os.path.exists(excel_folder):
         os.makedirs(excel_folder)
     
@@ -96,29 +91,27 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
 #     btnCreate.grid(column=0, row = 0)
 #     return question.get()
 
-# ##################################
+def open_image_viewer():
+    """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """
+    folder_path = entryTargetFolder.get()
+    excel_folder = "./GEN232_OFR/excelCollector"
 
-# def showQuestion(editTemplateWindow):
-#     templateDir = getFilePath()
-#     jsonContent = open(templateDir, encoding="utf8").read()
-#     # print(jsonContent)
-#     ttk.Label(editTemplateWindow, text = jsonContent).grid(column=2, row= 3)
+    if not os.path.exists(folder_path):
+        print("กรุณาเลือกโฟลเดอร์ที่มีรูปภาพก่อน")
+        return
+    
+    # หาไฟล์ Excel ล่าสุด
+    excel_files = sorted(glob.glob(f"{excel_folder}/*.xlsx"), key=os.path.getctime, reverse=True)
+    
+    if not excel_files:
+        print("ไม่พบไฟล์ Excel ในโฟลเดอร์")
+        return
 
-# def openEditTemplateWindow():
-#     editTemplateWindow = Tk()
-#     editTemplateWindow.title("Manage questions")
-#     editTemplateWindow.geometry("500x360")
+    latest_excel = excel_files[0]  # ใช้ไฟล์ Excel ล่าสุด
 
-#     # btnCreate = ttk.Button(editTemplateWindow, text="Create form template...")
-#     # btnCreate.grid(column=1, row = 1)
+    # เปิด ImageViewer และส่ง path ของ Excel
+    ImageViewer(root, folder_path, latest_excel)
 
-#     ttk.Label(editTemplateWindow, text="Select target template: ").grid(column=1, row= 1)
-#     ttk.Button(editTemplateWindow, text="Path...", command=showQuestion(editTemplateWindow)).grid(column=3, row=1)
-
-#     ttk.Button(editTemplateWindow, text="Save", command=editTemplateWindow.destroy).grid(column=1, row=5)
-#     editTemplateWindow.mainloop()
-
-# ############################
 
 root = Tk()
 root.title("Optical Form Recognition")
@@ -134,10 +127,9 @@ subTabTemplate = Menu()
 # subTabTemplate.add_command(label = "embed coord to docx")
 
 tab.add_cascade(label="Template", menu = subTabTemplate)
-#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 templateTextBox = Text(root, width=40, height=10)
 templateTextBox.place(x=40, y=100)
-#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 entryCoordTemplate = Entry(root, width = 70)
 entryCoordTemplate.place(x = 250, y = 10)
@@ -161,4 +153,6 @@ fileNameTextBox.place(x = 410, y = 100)
 
 Button(root, text="Submit", command=lambda:readMainPage(entryCoordTemplate, entryTargetFolder), height= 2, width = 10).place(x = 300, y = 280)
 Button(root, text="Quit", command=root.destroy, height = 2, width = 10).place(x = 400, y = 280)
+Button(root, text="Open Image Viewer", command=open_image_viewer, height=2, width=15).place(x=550, y=280)
+
 root.mainloop()
