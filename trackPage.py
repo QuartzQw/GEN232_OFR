@@ -122,6 +122,7 @@ def updateColName(entry, index):
 def writeFile(realCoords):
     # open file
      with open("./generateElement/colNames.dat", "wb") as f:
+        print(realCoords)
         pickle.dump(realCoords, f)
         print("File written successfully")
 

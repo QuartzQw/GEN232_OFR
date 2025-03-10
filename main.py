@@ -7,24 +7,26 @@ from PIL import Image, ImageTk
 import pandas as pd
 from datetime import datetime
 from showimg import ImageViewer
-from saveToExcel import process_survey
+import pickle
+# from saveToExcel import process_survey
 
 templateDict = {}
 
 def getFilePath(entry):
-    """ เปิดไฟล์ JSON และแสดงเนื้อหา """
+    """ open pointer file """
     entry.delete(0, END)
     if 'templateTextBox' in globals() and templateTextBox:
         templateTextBox.delete(1.0, END)
     
-    templateDir = filedialog.askopenfilename(filetypes=[('JSON', '.json')], initialdir='./')
+    templateDir = filedialog.askopenfilename(filetypes=[('DAT', '.dat')], initialdir='./')
     entry.insert(0, templateDir)
     
     if templateDir:
-        with open(templateDir, encoding="utf8") as file:
-            jsonContent = file.read()
-        if templateTextBox:
-            templateTextBox.insert(2.0, jsonContent)
+         with open(templateDir, "rb") as f:
+            realCoords = pickle.load(f)
+            print(realCoords)
+            if templateTextBox:
+                templateTextBox.insert(2.0, realCoords)
 
 def getFolderPath(entry):
     entry.delete(0,END)
@@ -55,7 +57,7 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
         return
 
     # สร้างโฟลเดอร์สำหรับเก็บไฟล์ Excel
-    excel_folder = "./GEN232_OFR/excelCollector"
+    excel_folder = "./excelCollector"
     if not os.path.exists(excel_folder):
         os.makedirs(excel_folder)
     
@@ -63,38 +65,12 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_excel = os.path.join(excel_folder, f"SurveyOnMultidimensionalPovertyIndex_{current_time}.xlsx")
 
-    process_survey(folderDir, templateDir, output_excel)
-
-# def readMainPage(entryCoordTemplate, entryTargetFolder):
-#     templateDir, folderDir = getEntriesValues(entryCoordTemplate, entryTargetFolder)
-#     print(open(templateDir, encoding="utf8").read())
-    # os.system('.\generate"')
-    ## print all file names in folderDir
-
-# def genDocFromJson():
-#     genDocWindow = Tk()
-#     genDocWindow.title("json to docx")
-#     genDocWindow.geometry("720x360+720+360")
-#     entryTemplate = Entry(genDocWindow, width = 70)
-#     entryTemplate.place(x = 250, y = 10)
-#     Label(genDocWindow, text="Upload form template").place(x = 10, y = 10)
-#     btnTemplate = Button(genDocWindow, text="Upload",command = lambda:getFilePath(entryTemplate))  
-#     btnTemplate.place(x = 150, y = 5)
-#     Button(genDocWindow, text="Quit", command=genDocWindow.destroy, height = 2, width = 10).place(x = 400, y = 100)
-
-# def createNewQuestion():
-#     createNewQuestionWindow = Tk()
-#     createNewQuestionWindow.title("create question")
-#     question = StringVar()
-#     Entry(root, textvariable = question)
-#     btnCreatechoice = ttk.Button(createNewQuestionWindow, text="Add choice",command=createNewQuestion)
-#     btnCreate.grid(column=0, row = 0)
-#     return question.get()
+    # process_survey(folderDir, templateDir, output_excel)
 
 def open_image_viewer():
     """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """
     folder_path = entryTargetFolder.get()
-    excel_folder = "./GEN232_OFR/excelCollector"
+    excel_folder = "./excelCollector"
 
     if not os.path.exists(folder_path):
         print("กรุณาเลือกโฟลเดอร์ที่มีรูปภาพก่อน")
