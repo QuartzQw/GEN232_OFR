@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from autoTrack import scan, cropToPath
+import pickle
 
 ix = -1
 iy = -1
@@ -8,11 +9,12 @@ coords = []
 realCoords = []
 drawStat = False
 resolutionValue = 0
+index = -1
 
 app = Tk()
 Scrollbar(app).pack(side = RIGHT, fill= Y)
 width, height = app.winfo_screenwidth(), app.winfo_screenheight()
-winWidth = int(width * 0.8)
+winWidth = int(width * 0.6)
 winHeight = height-100
 app.geometry(f"{winWidth}x{winHeight}+0+0")
 formHeight = winHeight-50
@@ -25,10 +27,13 @@ def searchRect(x, y):
 
 def drawAllRect(coords):
     for rect in coords:
-        formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
+        if rect[5] == "-":
+            formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1, outline='black')
+        else:
+            formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1, outline='blue')
 
 def get_xy(event):
-    global ix, iy, coords, drawStat
+    global ix, iy, coords, drawStat, index
 
     index, rect = searchRect(event.x, event.y)
     if index >= 0:
@@ -37,6 +42,8 @@ def get_xy(event):
 
         # draw select box
         formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1, outline='red')
+        entryColumnBox.delete(0,END)
+        entryColumnBox.insert(0,coords[index][5])
         
     else:
         if drawStat == False:
@@ -44,7 +51,23 @@ def get_xy(event):
             iy = event.y 
             drawStat = True
         else:
-            coords.append([ix, iy, event.x, event.y])
+            choiceType = "text"
+            if(1.1 >= (event.x - ix)/(event.y - iy) >= 0.9):
+                choiceType = "checkBox"
+            coords.append([
+                ix,
+                iy,
+                event.x,
+                event.y, 
+                choiceType, 
+                "-"])
+            realCoords.append([
+                resolutionValue*(ix-10), 
+                resolutionValue*(iy-10), 
+                resolutionValue*(event.x-10), 
+                resolutionValue*(event.y-10), 
+                choiceType,
+                "-"])
             drawStat = False
             drawAllRect(coords)
 
@@ -59,7 +82,10 @@ def del_element(event):
             idxToDel = i
         else:
             formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 1)
-    if (idxToDel != -1): del coords[idxToDel] 
+    if (idxToDel != -1): 
+        del coords[idxToDel] 
+        del realCoords[idxToDel]
+        drawAllRect(coords)
 
 def autoDetectPress(imgPath, imgWidth, imgHeight):
     global realCoords, resolutionValue, coords
@@ -78,8 +104,7 @@ def autoDetectPress(imgPath, imgWidth, imgHeight):
          resolution = resolutionValue)
      
      # transform rect 
-    coords = [[coord//resolutionValue+10 for coord in rect[0:4]] + [rect[4]] for rect in realCoords]
-    # print(coords)
+    coords = [[coord//resolutionValue+10 for coord in rect[0:4]] + [rect[4], rect[5]] for rect in realCoords]
 
     formCanv.create_image(10,10, image = image, anchor = "nw")
 
@@ -89,6 +114,16 @@ def autoDetectPress(imgPath, imgWidth, imgHeight):
 def cropPress(imgPath, imgWidth, imgHeight, realCoords, resolution):
     cropToPath(imgPath, imgWidth, imgHeight, realCoords, resolution)
 
+def updateColName(entry, index):
+    colName = entry.get()
+    coords[index][5] = colName
+    realCoords[index][5] = colName
+
+def writeFile(realCoords):
+    # open file
+     with open("./generateElement/colNames.dat", "wb") as f:
+        pickle.dump(realCoords, f)
+        print("File written successfully")
 
 formCanv = Canvas(app)
 formCanv.pack(anchor="nw")
@@ -128,14 +163,24 @@ resolution = Scale(app, from_=1, to=8, length = scaleLength, orient=HORIZONTAL)
 resolution.place(x=xAuto + 80, y= yAuto+140)
 
 blockSize.set(141)
-cVal.set(7)
-minArea.set(135)
+cVal.set(5)
+minArea.set(153)
 resolution.set(3)
 
 autoDetect = Button(app, text="Auto detect", command=lambda:autoDetectPress(imgPath=imgPath, imgWidth=formWidth, imgHeight= formHeight))
-autoDetect.place(x = xAuto, y = yAuto + 180)
-autoDetect = Button(app, text="CROP!!!!!!!", command=lambda:cropPress(imgPath, imgWidth=formWidth, imgHeight= formHeight, realCoords = realCoords, resolution = resolutionValue))
-autoDetect.place(x = xAuto+200, y = yAuto + 180)
+autoDetect.place(x = xAuto, y = yAuto + 200)
+
+Label(app, text="Column name").place(x = xAuto, y = yAuto+300)
+# autoDetect = Button(app, text="CROP!!!!!!!", command=lambda:cropPress(imgPath, imgWidth=formWidth, imgHeight= formHeight, realCoords = realCoords, resolution = resolutionValue))
+# autoDetect.place(x = xAuto+200, y = yAuto + 180)
+entryColumnBox = Entry(app, width = 30)
+entryColumnBox.place(x= xAuto + 20, y= yAuto +350)
+
+submitColName = Button(app, text="submit column name", command=lambda:updateColName(entryColumnBox, index))
+submitColName.place(x = xAuto + 100, y = yAuto + 400)
+
+saveColData = Button(app, text = "save pointer file (.txt)", command=lambda:writeFile(realCoords))
+saveColData.place(x = xAuto + 100, y = yAuto + 500)
 
 app.mainloop()
 

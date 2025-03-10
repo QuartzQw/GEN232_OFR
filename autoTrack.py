@@ -41,10 +41,10 @@ def scan(filePath, **kwargs):
             x,y,w,h = cv2.boundingRect(c)
             ratio = w/h
             if (1.1 >= ratio >= 0.9): 
-                coords.append([x,y,x+w,y+h,"checkBox"])
+                coords.append([x,y,x+w,y+h,"checkBox","-"])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,12), 2)
             elif(ratio >= 1.5):
-                coords.append([x,y,x+w,y+h,"text"])
+                coords.append([x,y,x+w,y+h,"text","-"])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
 
     return coords
