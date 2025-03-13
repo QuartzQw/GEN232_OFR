@@ -8,7 +8,7 @@ import pandas as pd
 from datetime import datetime
 from showimg import ImageViewer
 import pickle
-# from saveToExcel import process_survey
+from saveToExcel import process_survey
 
 templateDict = {}
 
@@ -24,7 +24,7 @@ def getFilePath(entry):
     if templateDir:
          with open(templateDir, "rb") as f:
             realCoords = pickle.load(f)
-            print(realCoords)
+            # print(realCoords)
             if templateTextBox:
                 templateTextBox.insert(2.0, realCoords)
 
@@ -45,11 +45,11 @@ def getEntriesValues(*entries):
     return entryRecord
 
 def readMainPage(entryCoordTemplate, entryTargetFolder):
-    """ อ่านข้อมูลจาก JSON และประมวลผลภาพ """
+    """ อ่านข้อมูลจาก dat และประมวลผลภาพ """
     templateDir, folderDir = entryCoordTemplate.get(), entryTargetFolder.get()
     
     if not os.path.exists(templateDir):
-        print("ไม่พบไฟล์ JSON กรุณาเลือกใหม่")
+        print("ไม่พบไฟล์พิกัด (.dat) กรุณาเลือกใหม่")
         return
 
     if not os.path.exists(folderDir):
@@ -63,9 +63,9 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     
     # กำหนดชื่อไฟล์ Excel ตามวันที่ปัจจุบัน
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_excel = os.path.join(excel_folder, f"SurveyOnMultidimensionalPovertyIndex_{current_time}.xlsx")
+    output_excel = os.path.join(excel_folder, f"output-{current_time}.xlsx")
 
-    # process_survey(folderDir, templateDir, output_excel)
+    process_survey(folderDir, templateDir, output_excel)
 
 def open_image_viewer():
     """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """

@@ -2,9 +2,10 @@ from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncode
 from PIL import Image
 from glob import glob
 
-modelName = "trocrOrginal"
+modelName = "trocrOriginal"
 modelPath = f"./pretrained/{modelName}/processor"
 procPath = f"./pretrained/{modelName}/model"
+
 
 # cache processor and model to local system
 # processor = TrOCRProcessor.from_pretrained('openthaigpt/thai-trocr')

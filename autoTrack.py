@@ -8,10 +8,11 @@ def scan(filePath, **kwargs):
 
     # Read image. 
     image = cv2.imread(filePath, cv2.IMREAD_COLOR)
+    imageWidth = kwargs["imgWidth"] * kwargs["resolution"]
+    imageHeight = kwargs["imgHeight"] * kwargs["resolution"]
     img = cv2.resize(
         image, 
-        (kwargs["imgWidth"] * kwargs["resolution"],
-          kwargs["imgHeight"] * kwargs["resolution"]),
+        (imageWidth, imageHeight),
         interpolation = cv2.INTER_AREA)
     # cv2.imshow("transformed", img) 
 
@@ -40,11 +41,11 @@ def scan(filePath, **kwargs):
         if cv2.contourArea(c) > kwargs["minArea"] :
             x,y,w,h = cv2.boundingRect(c)
             ratio = w/h
-            if (1.1 >= ratio >= 0.9): 
-                coords.append([x,y,x+w,y+h,"checkBox","-"])
+            if (1.2 >= ratio >= 0.8): 
+                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"checkBox","-"])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,12), 2)
-            elif(ratio >= 1.5):
-                coords.append([x,y,x+w,y+h,"text","-"])
+            elif(ratio > 1.2):
+                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"text","-"])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
 
     return coords
