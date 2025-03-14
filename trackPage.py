@@ -12,7 +12,7 @@ realCoords = []
 drawStat = False
 resolutionValue = 0
 index = -1
-imgPath = "./data/demo3.jpg"
+imgPath = "./data/emptyTemplate.jpg"
 
 app = Tk()
 Scrollbar(app).pack(side = RIGHT, fill= Y)
@@ -137,7 +137,7 @@ def writeFile(realCoords):
     currentTime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     # output_excel = os.path.join(excel_folder, f"SurveyOnMultidimensionalPovertyIndex_{current_time}.xlsx")
 
-    with open(f"./generateElement/colNames-{currentTime}.dat", "wb") as f:
+    with open(f"./generateElement/boxPointer-{currentTime}.dat", "wb") as f:
         print(realCoords)
         pickle.dump(realCoords, f)
         print("File written successfully")
@@ -202,7 +202,7 @@ entryColumnBox.place(x= xAuto + 120, y= yAuto + 365)
 submitColName = Button(app, text="Submit column name", command=lambda:updateColName(entryColumnBox, index))
 submitColName.place(x = xAuto , y = yAuto + 400)
 
-saveColData = Button(app, text = "save pointer file (.txt)", command=lambda:writeFile(realCoords))
+saveColData = Button(app, text = "save pointer file (.dat)", command=lambda:writeFile(realCoords))
 saveColData.place(x = xAuto + 100, y = yAuto + 520)
 
 app.mainloop()

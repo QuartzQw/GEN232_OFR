@@ -19,7 +19,7 @@ encoder_decoder_config = VisionEncoderDecoderConfig.from_pretrained(modelPath)
 model = VisionEncoderDecoderModel.from_pretrained(modelPath, config=encoder_decoder_config)
 
 # Load Thai-TroCR model
-# pipe = pipeline("image-to-text", model="openthaigpt/thai-trocr")
+# pipe = pipeline("image-to-text", model="kkatiz/thai-trocr-thaigov-v2")
 
 def extract_text_from_image(image, coordinate, imgDraw):
     """Crop image based on coordinates and use Thai-TroCR for text extraction"""
@@ -28,11 +28,12 @@ def extract_text_from_image(image, coordinate, imgDraw):
 
     pixel_values = processor(images=cropped_img, return_tensors="pt").pixel_values
     generated_ids = model.generate(pixel_values)
-    generated_text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+    text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
     # Use Thai-TroCR model
     # text = pipe(cropped_img)[0]['generated_text']
-    return generated_text.strip()
+    
+    return text.strip()
 
 # def clean_number(text):
 #     """Extract only numbers"""
