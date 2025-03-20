@@ -131,7 +131,7 @@ def process_survey_crop(image_folder, templateDir, output_file):
                     img.height = 18
                     column = to_excel(i+1)
                     cell_address = f"{column}{index + 2}"
-                    ws.cell(row = index+2, column= i+1).value = " "
+                    ws.cell(row = index+2, column= i+1).value = " " #
                     img.anchor = cell_address
                     ws.add_image(img)
         
