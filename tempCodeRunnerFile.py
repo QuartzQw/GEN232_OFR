@@ -1,5 +1,4 @@
-entryEmptyTemplate = Entry(app, width = int((winWidth-xAuto)*0.1))
-entryEmptyTemplate.place(x = xAuto+100, y = yAuto+45)
-Label(app, text="Upload form template", font=font).place(x = xAuto, y = yAuto)
-btnFind = Button(app, text="Select file",command = lambda:getFilePath(entryEmptyTemplate))
-btnFind.place(x = xAuto + 20, y = yAuto+40)
+ # img = Image(row["image_path"])
+            # cell_address = f"C{index + 2}"
+            # img.anchor = cell_address
+            # ws.add_image(img)

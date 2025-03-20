@@ -8,7 +8,7 @@ import pandas as pd
 from datetime import datetime
 from showimg import ImageViewer
 import pickle
-from saveToExcel import process_survey
+from saveToExcel import process_survey_crop
 
 templateDict = {}
 
@@ -65,7 +65,7 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_excel = os.path.join(excel_folder, f"output-{current_time}.xlsx")
 
-    process_survey(folderDir, templateDir, output_excel)
+    process_survey_crop(folderDir, templateDir, output_excel)
 
 def open_image_viewer():
     """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """
