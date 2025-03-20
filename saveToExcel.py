@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 import pickle
 from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
-modelName = "trocrOriginal"
+modelName = "thai-trocr"
 modelPath = f"./pretrained/{modelName}/processor"
 procPath = f"./pretrained/{modelName}/model"
 
@@ -98,5 +98,6 @@ def process_survey(image_folder, templateDir, output_file):
         image.show()
     
     df = pd.DataFrame(all_data)
+    df = df[list(df.columns[::-1])] #กลับด้าน ecel
     df.to_excel(output_file, index=False)
     print(f"File saved at: {output_file}")
