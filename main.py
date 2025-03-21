@@ -65,7 +65,8 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_excel = os.path.join(excel_folder, f"output-{current_time}.xlsx")
 
-    process_survey(folderDir, templateDir, output_excel)
+    image_save_folder = "./cropped_images"
+    process_survey(folderDir, templateDir, output_excel, image_save_folder)
 
 def open_image_viewer():
     """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """
