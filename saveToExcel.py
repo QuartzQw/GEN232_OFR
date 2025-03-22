@@ -1,43 +1,44 @@
 import os
-# import json
 import pandas as pd
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw
-# from transformers import pipeline
 import pickle
 from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
-modelName = "trocrOriginal"
-modelPath = f"./pretrained/{modelName}/processor"
-procPath = f"./pretrained/{modelName}/model"
+## หนูเปลี่ยนชื่อตัวแปร เผื่อจะพิ่มโมเดลตัวเลขนะคะ
+text_model_name = "trocrOriginal"
+text_proc_path = f"./pretrained/{text_model_name}/processor"
+text_model_path = f"./pretrained/{text_model_name}/model"
 
 THRESHOLD = 220  # Threshold for checkbox detection
 
-processor = TrOCRProcessor.from_pretrained(procPath)
-encoder_decoder_config = VisionEncoderDecoderConfig.from_pretrained(modelPath)
-model = VisionEncoderDecoderModel.from_pretrained(modelPath, config=encoder_decoder_config)
-
-# Load Thai-TroCR model
-# pipe = pipeline("image-to-text", model="kkatiz/thai-trocr-thaigov-v2")
+# Load text OCR model
+text_processor = TrOCRProcessor.from_pretrained(text_model_path)
+text_config = VisionEncoderDecoderConfig.from_pretrained(text_proc_path)
+text_model = VisionEncoderDecoderModel.from_pretrained(text_proc_path, config=text_config)
 
 def extract_text_from_image(image, coordinate, imgDraw):
-    """Crop image based on coordinates and use Thai-TroCR for text extraction"""
+    """Extract general text from image using TrOCR"""
     cropped_img = image.crop(coordinate)
     imgDraw.rectangle(coordinate, outline ="blue")
 
-    pixel_values = processor(images=cropped_img, return_tensors="pt").pixel_values
-    generated_ids = model.generate(pixel_values)
-    text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
-
-    # Use Thai-TroCR model
-    # text = pipe(cropped_img)[0]['generated_text']
+    pixel_values = text_processor(images=cropped_img, return_tensors="pt").pixel_values
+    generated_ids = text_model.generate(pixel_values)
+    text = text_processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
     
     return text.strip()
 
-# def clean_number(text):
-#     """Extract only numbers"""
-#     return "".join(filter(str.isdigit, text))
+#########################
+def extract_number_from_image(image, coordinate, imgDraw):
+    """Extract numbers (int) from image using text model and keep digits only"""
+    cropped_img = image.crop(coordinate)
+    imgDraw.rectangle(coordinate, outline="green")
+    pixel_values = text_processor(images=cropped_img, return_tensors="pt").pixel_values
+    generated_ids = text_model.generate(pixel_values)
+    text = text_processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+    return ''.join(filter(str.isdigit, text))
+#########################
 
 def is_checkbox_checked(image, coordinate, imgDraw):
     """Check if a checkbox is ticked based on threshold"""
@@ -52,21 +53,29 @@ def is_checkbox_checked(image, coordinate, imgDraw):
     # total_pixels = width * height
     return 1 if black_pixels > THRESHOLD else 0
 
-def process_survey(image_folder, templateDir, output_file):
-    """Scan multiple images and save results to an Excel file"""
-    # with open(json_path, "r", encoding="utf-8") as file:
-    #     template_data = json.load(file)
+###############
+def crop_image_to_path(image, coordinate, save_dir, field_name, image_index):
+    """Crop image at the given coordinates and save to path"""
+    cropped_img = image.crop(coordinate)
+    os.makedirs(save_dir, exist_ok=True)
+    file_path = os.path.join(save_dir, f"{field_name}_{image_index}.png")
+    cropped_img.save(file_path)
+    return file_path
+################
+
+def process_survey(image_folder, templateDir, output_file, image_save_folder):
+    """Scan multiple images and save results to an Excel file and cropped image folder"""
     with open(templateDir, "rb") as f:
         realCoords = pickle.load(f)
     
     image_paths = [os.path.join(image_folder, f) for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
     all_data = []
-    
-    for image_path in image_paths:
+
+    for image_index, image_path in enumerate(image_paths):
         image = Image.open(image_path)
         imgDraw = ImageDraw.Draw(image)
         extracted_data = {}
-        
+
         # for question in template_data["questions"]:
         #     for key, choice in question["choices"].items():
         #         if choice["choiceType"] in ["text", "longText"]:
@@ -88,12 +97,19 @@ def process_survey(image_folder, templateDir, output_file):
                 coordinates[1] * imageHeight,
                 coordinates[2] * imageWidth,
                 coordinates[3] * imageHeight)
-            if coordinates[4] == "checkBox":
-                extracted_data[coordinates[5]] = is_checkbox_checked(image, coordinate, imgDraw)
-            elif coordinates[4] == "text":
-                extracted_data[coordinates[5]] = extract_text_from_image(image, coordinate, imgDraw)
 
-        
+            field_type = coordinates[4]
+            field_name = coordinates[5]
+
+            if field_type == "checkBox":
+                extracted_data[field_name] = is_checkbox_checked(image, coordinate, imgDraw)
+            elif field_type == "text":
+                extracted_data[field_name] = extract_text_from_image(image, coordinate, imgDraw)
+            elif field_type == "int":
+                extracted_data[field_name] = extract_number_from_image(image, coordinate, imgDraw)
+            elif field_type == "image":
+                extracted_data[field_name] = crop_image_to_path(image, coordinate, image_save_folder, field_name, image_index)
+
         all_data.append(extracted_data)
         image.show()
     

@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from tkinter import filedialog
+from tkinter import filedialog, ttk
 from autoTrack import scan, cropToPath
 import pickle
 from datetime import datetime
@@ -56,7 +56,8 @@ def get_xy(event):
         formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width = 2, outline='red')
         entryColumnBox.delete(0,END)
         entryColumnBox.insert(0,coords[index][5])
-        
+        dataTypeBox.set(coords[index][4])
+
     else:
         if drawStat == False:
             ix = event.x 
@@ -80,7 +81,8 @@ def get_xy(event):
                 event.x/formWidth, 
                 event.y/formHeight, 
                 choiceType,
-                "-"])
+                "-",
+                None])
             drawStat = False
             drawAllRect(coords)
 
@@ -129,14 +131,34 @@ def cropPress(imgPath, imgWidth, imgHeight, realCoords, resolution):
 
 def updateColName(entry, index):
     colName = entry.get()
+    data_type = dataTypeBox.get()
+    model_type = "trocr" if data_type == "text" else "digits-ocr" if data_type == "int" else None
+
+    has_col_name = coords[index][5] != colName
+    has_data_type = coords[index][4] != data_type
+
     coords[index][5] = colName
+    coords[index][4] = data_type
+
     realCoords[index][5] = colName
+    realCoords[index][4] = data_type
+    if len(realCoords[index]) == 6:
+        realCoords[index].append(model_type)
+    else:
+        realCoords[index][6] = model_type
+
+    # เปลี่ยนสีกรอบตามการเปลี่ยนแปลง
+    formCanv.create_image(10, 10, image=image, anchor="nw")
+    drawAllRect(coords)
+    rect = coords[index]
+    outline_color = "blue" if has_col_name else "green"
+    formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width=2, outline=outline_color)
+
+    # writeFile(realCoords)
 
 def writeFile(realCoords):
     # open file
     currentTime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    # output_excel = os.path.join(excel_folder, f"SurveyOnMultidimensionalPovertyIndex_{current_time}.xlsx")
-
     with open(f"./generateElement/boxPointer-{currentTime}.dat", "wb") as f:
         print(realCoords)
         pickle.dump(realCoords, f)
@@ -160,15 +182,16 @@ formCanv.create_image(10,10, image = image, anchor = "nw")
 
 font=("Helvetica", 10, "bold")
 xAuto = formWidth+50
-# yAuto = 10
 yAuto = -90
 scaleLength = winWidth-formWidth-200
 
-# entryEmptyTemplate = Entry(app, width = int((winWidth-xAuto)*0.1))
-# entryEmptyTemplate.place(x = xAuto+100, y = yAuto+45)
-# Label(app, text="Upload form template", font=font).place(x = xAuto, y = yAuto)
-# btnFind = Button(app, text="Select file",command = lambda:getFilePath(entryEmptyTemplate))
-# btnFind.place(x = xAuto + 20, y = yAuto+40)
+Label(app, text="Data Type:", font=font).place(x=xAuto, y=yAuto+390)
+dataTypeBox = ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
+dataTypeBox.place(x=xAuto + 120, y=yAuto + 395)
+dataTypeBox.current(0)
+
+entryColumnBox = Entry(app, width=20)
+entryColumnBox.place(x=xAuto + 120, y=yAuto + 365)
 
 Label(app, text="Parameter tuning for auto-detect", font=font).place(x = xAuto, y = yAuto+100)
 
@@ -194,16 +217,13 @@ autoDetect = Button(app, text="Auto detect", command=lambda:autoDetectPress(imgP
 autoDetect.place(x = xAuto, y = yAuto + 300)
 
 Label(app, text="Column name:", font=font).place(x = xAuto, y = yAuto+360)
-# autoDetect = Button(app, text="CROP!!!!!!!", command=lambda:cropPress(imgPath, imgWidth=formWidth, imgHeight= formHeight, realCoords = realCoords, resolution = resolutionValue))
-# autoDetect.place(x = xAuto+200, y = yAuto + 180)
 entryColumnBox = Entry(app, width = int((winWidth-xAuto)*0.07))
 entryColumnBox.place(x= xAuto + 120, y= yAuto + 365)
 
 submitColName = Button(app, text="Submit column name", command=lambda:updateColName(entryColumnBox, index))
-submitColName.place(x = xAuto , y = yAuto + 400)
+submitColName.place(x = xAuto , y = yAuto + 475)
 
 saveColData = Button(app, text = "save pointer file (.dat)", command=lambda:writeFile(realCoords))
 saveColData.place(x = xAuto + 100, y = yAuto + 520)
 
 app.mainloop()
-
