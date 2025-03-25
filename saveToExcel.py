@@ -5,17 +5,18 @@ import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 import xlsxwriter
-# from transformers import pipeline
 import pickle
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image as opxImage
+import glob
+
+# from transformers import pipeline
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
 # modelName = "trocrOriginal"
 # modelPath = f"./pretrained/{modelName}/processor"
 # procPath = f"./pretrained/{modelName}/model"
 
-THRESHOLD = 220  # Threshold for checkbox detection
 
 # processor = TrOCRProcessor.from_pretrained(procPath)
 # encoder_decoder_config = VisionEncoderDecoderConfig.from_pretrained(modelPath)
@@ -25,6 +26,8 @@ THRESHOLD = 220  # Threshold for checkbox detection
 # pipe = pipeline("image-to-text", model="kkatiz/thai-trocr-thaigov-v2")
 
 import string
+
+THRESHOLD = 220  # Threshold for checkbox detection
 
 def divmod_excel(n):
     a, b = divmod(n, 26)
@@ -100,7 +103,9 @@ def process_survey_crop(image_folder, templateDir, output_file):
             if coordinates[4] == "checkBox":
                 extracted_data[coordinates[5]] = is_checkbox_checked(cropped_image)
             elif coordinates[4] == "text":
-                fName = f"tempArea/{row}_{col}.jpg"
+                if not os.path.exists("./tempArea"):
+                    os.makedirs("./tempArea")
+                fName = f"./tempArea/{row}_{col}.jpg"
                 im1 = cropped_image.save(fName)
                 extracted_data[coordinates[5]] = fName
             col += 1
@@ -125,7 +130,7 @@ def process_survey_crop(image_folder, templateDir, output_file):
         for index, row in df.iterrows():
             for i, item in enumerate(row):
                 if type(item) != int:
-                    print(item)
+                    # print(item)
                     img = opxImage(item)
                     img.width = 72
                     img.height = 18
@@ -135,5 +140,11 @@ def process_survey_crop(image_folder, templateDir, output_file):
                     img.anchor = cell_address
                     ws.add_image(img)
         
+    files = os.listdir('tempArea/')
+    # print(files)
+    for f in files:
+        # print(f)
+        os.remove(f"tempArea/{f}")
+    
 
 
