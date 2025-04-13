@@ -18,7 +18,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 # text_proc_path = f"./pretrained/{text_model_name}/processor"
 # text_model_path = f"./pretrained/{text_model_name}/model"
 
-THRESHOLD = 220  # Threshold for checkbox detection
+# THRESHOLD = 220  # Threshold for checkbox detection
 
 # Load text OCR model
 # text_processor = TrOCRProcessor.from_pretrained(text_model_path)
@@ -44,10 +44,6 @@ def preprocess_image(cropped_image):
     # img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     img = cropped_image.convert('L')
     img = np.array(img)
-
-    print(img.shape)
-    if img is None:
-        raise ValueError("Image not found or invalid path")
     
     # Invert and threshold image (assuming black digits on white background)
     img = cv2.bitwise_not(img)
@@ -151,8 +147,9 @@ def is_checkbox_checked(cropped_image):
     
     # Calculate percentage of black pixels
     black_pixels = np.sum(thresholded == 255)
-    # total_pixels = width * height
-    return 1 if black_pixels > THRESHOLD else 0
+    width, height = img_np.shape
+    total_pixels = width * height
+    return 1 if black_pixels > 0.5*total_pixels else 0
 
 ###############
 def crop_image_to_path(cropped_image, save_dir, field_name, image_index):

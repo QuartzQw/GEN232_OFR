@@ -83,7 +83,7 @@ def get_xy(event):
         # secod time click
         else:
             choiceType = "text"
-            if (1.1 >= (event.x - ix)/(event.y - iy) >= 0.9):
+            if (1.2 >= (event.x - ix)/(event.y - iy) >= 0.8):
                 choiceType = "checkBox"
             coords.append([ix,                  iy,             event.x,            event.y,            choiceType, len(coords)])
             realCoords.append([ix/formWidth,    iy/formHeight,  event.x/formWidth,  event.y/formHeight, choiceType, len(realCoords),    None])
