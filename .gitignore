@@ -173,5 +173,5 @@ cython_debug/
 /pretrained
 
 # IO files
-.xlsx
-.dat
+*.xlsx
+*.dat
