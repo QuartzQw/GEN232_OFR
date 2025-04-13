@@ -1,9 +1,11 @@
+import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import filedialog, ttk
 from autoTrack import scan
 import pickle
 from datetime import datetime
+import os
 
 # global variables
 ix = -1
@@ -173,10 +175,11 @@ def updateColName(entry, dataTypeBox, index):
 def writeFile(realCoords):
     # open file
     currentTime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    with open(f"./generateElement/boxPointer-{currentTime}.dat", "wb") as f:
-        print(realCoords)
+    targetPath = f"./generateElement/boxPointer-{currentTime}.dat"
+    with open(targetPath, "wb") as f:
+        # print(realCoords)
         pickle.dump(realCoords, f)
-        print("File written successfully")
+        tk.messagebox.showinfo(title = "System", message = f"File written successfully at \n {os.path.abspath(targetPath)}")
 
 
 def uploadTemplate_block(position_x, position_y):
