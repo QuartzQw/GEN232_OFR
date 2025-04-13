@@ -5,7 +5,6 @@ from autoTrack import scan
 import pickle
 from datetime import datetime
 
-
 # global variables
 ix = -1
 iy = -1
@@ -16,17 +15,6 @@ resolutionValue = 0
 index = -1
 imgPath = None
 image = None
-
-# # create an window, size varied on monitor.
-# app = Tk()
-# width, height = app.winfo_screenwidth(), app.winfo_screenheight()
-# winWidth = int(width * 0.6)
-# winHeight = int(height * 0.9)
-# app.geometry(f"{winWidth}x{winHeight}+0+0")
-
-# # calculate A4 form area
-# formHeight = winHeight-20
-# formWidth = int(formHeight/1.414213)
 
 
 def getFilePath(entry):
@@ -54,7 +42,7 @@ def drawAllRect(coords):
         if box has filled columns name, drew box border will be blue
         Otherwise the box border will be black"""
     for rect in coords:
-        if rect[5] == "-":
+        if type(rect[5]) == int:
             formCanv.create_rectangle(
                 rect[0], rect[1], rect[2], rect[3], width=2, outline='black')
         else:
@@ -63,9 +51,15 @@ def drawAllRect(coords):
 
 
 def get_xy(event):
+    """
+    perform action if there's left clicking on canva area
+    """
     global ix, iy, coords, drawStat, index
 
+    # search if clicking point has any box
     index, rect = searchRect(event.x, event.y)
+    
+     # if the box has found, do column insert
     if index >= 0:
         drawStat = False
         drawAllRect(coords)
@@ -77,22 +71,26 @@ def get_xy(event):
         entryColumnBox.insert(0, coords[index][5])
         dataTypeBox.set(coords[index][4])
 
+    # if clicked point has no block, do new box operation
     else:
+        #first time click
         if drawStat == False:
             ix = event.x
             iy = event.y
             formCanv.create_oval(ix, iy, ix, iy, fill="black", width=2)
             drawStat = True
+        # secod time click
         else:
             choiceType = "text"
             if (1.1 >= (event.x - ix)/(event.y - iy) >= 0.9):
                 choiceType = "checkBox"
-            coords.append([ix,                  iy,             event.x,            event.y,            choiceType, "-"])
-            realCoords.append([ix/formWidth,    iy/formHeight,  event.x/formWidth,  event.y/formHeight, choiceType, "-",    None])
+            coords.append([ix,                  iy,             event.x,            event.y,            choiceType, len(coords)])
+            realCoords.append([ix/formWidth,    iy/formHeight,  event.x/formWidth,  event.y/formHeight, choiceType, len(realCoords),    None])
             drawStat = False
             drawAllRect(coords)
 
 def del_element(event):
+    """this event call when right click to existed box"""
     global drawStat
 
     drawStat = False
@@ -111,6 +109,8 @@ def del_element(event):
 
 
 def autoDetectPress(imgPath, imgWidth, imgHeight, **params):
+    """This function will extract value from the sliders,
+    and call scan function to automatically identify boxes over form"""
     global realCoords, resolutionValue, coords
 
     # blockSize, cVal, minArea, resolution
@@ -141,6 +141,7 @@ def autoDetectPress(imgPath, imgWidth, imgHeight, **params):
 #     cropToPath(imgPath, imgWidth, imgHeight, realCoords, resolution)
 
 def updateColName(entry, dataTypeBox, index):
+    """This function will insert model type to box position data"""
     colName = entry.get()
     data_type = dataTypeBox.get()
     model_type = "trocr" if data_type == "text" else "digits-ocr" if data_type == "int" else None
@@ -258,6 +259,7 @@ def setupFormCanva(imgPath):
     
 # create an window, size varied on monitor.
 app = Tk()
+app.title('Optical Form Recognition - Pointer')
 width, height = app.winfo_screenwidth(), app.winfo_screenheight()
 winWidth = int(width * 0.6)
 winHeight = int(height * 0.9)
