@@ -229,9 +229,7 @@ def updateColumnDetail_block(position_x, position_y):
     global entryColumnBox, dataTypeBox
 
     Label(app, text="Column name:", font=font).place(x=position_x, y=position_y)
-    entryColumnBox = Entry(app, width=int((winWidth-position_x)*0.07))
-    entryColumnBox.place(x=position_x + 120, y=position_y + 5)
-    entryColumnBox = Entry(app, width=20)
+    entryColumnBox = Entry(app, width=30)
     entryColumnBox.place(x=position_x + 120, y=position_y + 5)
     
     Label(app, text="Data Type:", font=font).place(x=position_x, y=position_y+30)
