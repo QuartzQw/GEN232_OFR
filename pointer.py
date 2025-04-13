@@ -1,7 +1,5 @@
 import tkinter as tk
-from tkinter import *
 from PIL import Image, ImageTk
-from tkinter import filedialog, ttk
 from autoTrack import scan
 import pickle
 from datetime import datetime
@@ -22,8 +20,8 @@ image = None
 def getFilePath(entry):
     """ After click upload empty template button, This function will insert target path into entry box for showing"""
     global imgPath
-    entry.delete(0, END)
-    templateDir = filedialog.askopenfilename(
+    entry.delete(0, tk.END)
+    templateDir = tk.filedialog.askopenfilename(
         filetypes=[('JPEG', '.jpg')], initialdir='./')
     entry.insert(0, templateDir)
     imgPath = templateDir
@@ -69,7 +67,7 @@ def get_xy(event):
         # draw select box
         formCanv.create_rectangle(
             rect[0], rect[1], rect[2], rect[3], width=2, outline='red')
-        entryColumnBox.delete(0, END)
+        entryColumnBox.delete(0, tk.END)
         entryColumnBox.insert(0, coords[index][5])
         dataTypeBox.set(coords[index][4])
 
@@ -183,47 +181,47 @@ def writeFile(realCoords):
 
 
 def uploadTemplate_block(position_x, position_y):
-    Label(app, text="Upload empty template", font=font).place(
+    tk.Label(app, text="Upload empty template", font=font).place(
         x=position_x, y=position_y)
-    entryCoordTemplate = Entry(app, width=40)
+    entryCoordTemplate = tk.Entry(app, width=40)
     entryCoordTemplate.place(x=position_x + 60, y=position_y + 40)
-    btnFind = Button(app, text="Upload",
+    btnFind = tk.Button(app, text="Upload",
                      command=lambda: getFilePath(entryCoordTemplate))
     btnFind.place(x=position_x, y=position_y + 40)
-    btnFind = Button(app, text="Okay", command=lambda: setupFormCanva(
+    btnFind = tk.Button(app, text="Okay", command=lambda: setupFormCanva(
         entryCoordTemplate.get()))
     btnFind.place(x=position_x + 320, y=position_y + 40)
 
 
 def tuneParameter_block(position_x, position_y):
-    Label(app, text="Parameter tuning for auto-detect",
+    tk.Label(app, text="Parameter tuning for auto-detect",
           font=font).place(x=position_x, y=position_y)
 
-    Label(app, text="block size").place(x=position_x+20, y=position_y+40)
-    blockSize = Scale(app, from_=3, to=255, length=scaleLength,
-                      resolution=2, orient=HORIZONTAL)
+    tk.Label(app, text="block size").place(x=position_x+20, y=position_y+40)
+    blockSize = tk.Scale(app, from_=3, to=255, length=scaleLength,
+                      resolution=2, orient=tk.HORIZONTAL)
     blockSize.place(x=position_x + 80, y=position_y+20)
     blockSize.set(141)
 
-    Label(app, text="C-value").place(x=position_x+20, y=position_y+80)
-    cVal = Scale(app, from_=1, to=15, length=scaleLength,
-                 resolution=2, orient=HORIZONTAL)
+    tk.Label(app, text="C-value").place(x=position_x+20, y=position_y+80)
+    cVal = tk.Scale(app, from_=1, to=15, length=scaleLength,
+                 resolution=2, orient=tk.HORIZONTAL)
     cVal.place(x=position_x + 80, y=position_y+60)
     cVal.set(5)
 
-    Label(app, text="min. area").place(x=position_x+20, y=position_y+120)
-    minArea = Scale(app, from_=0, to=1000,
-                    length=scaleLength, orient=HORIZONTAL)
+    tk.Label(app, text="min. area").place(x=position_x+20, y=position_y+120)
+    minArea = tk.Scale(app, from_=0, to=1000,
+                    length=scaleLength, orient=tk.HORIZONTAL)
     minArea.place(x=position_x + 80, y=position_y+100)
     minArea.set(153)
 
-    Label(app, text="resolution").place(x=position_x+20, y=position_y+160)
-    resolution = Scale(app, from_=1, to=8,
-                       length=scaleLength, orient=HORIZONTAL)
+    tk.Label(app, text="resolution").place(x=position_x+20, y=position_y+160)
+    resolution = tk.Scale(app, from_=1, to=8,
+                       length=scaleLength, orient=tk.HORIZONTAL)
     resolution.place(x=position_x + 80, y=position_y+140)
     resolution.set(3)
 
-    autoDetect = Button(app, text="Auto detect", command=lambda: autoDetectPress(
+    autoDetect = tk.Button(app, text="Auto detect", command=lambda: autoDetectPress(
         imgPath=imgPath, imgWidth=formWidth, imgHeight=formHeight, 
         blockSize=blockSize, cVal=cVal, minArea=minArea, resolution=resolution))
     autoDetect.place(x=position_x, y=position_y + 200)
@@ -231,20 +229,20 @@ def tuneParameter_block(position_x, position_y):
 def updateColumnDetail_block(position_x, position_y):
     global entryColumnBox, dataTypeBox
 
-    Label(app, text="Column name:", font=font).place(x=position_x, y=position_y)
-    entryColumnBox = Entry(app, width=30)
+    tk.Label(app, text="Column name:", font=font).place(x=position_x, y=position_y)
+    entryColumnBox = tk.Entry(app, width=30)
     entryColumnBox.place(x=position_x + 120, y=position_y + 5)
     
-    Label(app, text="Data Type:", font=font).place(x=position_x, y=position_y+30)
-    dataTypeBox = ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
+    tk.Label(app, text="Data Type:", font=font).place(x=position_x, y=position_y+30)
+    dataTypeBox = tk.ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
     dataTypeBox.place(x=position_x + 120, y=position_y + 35)
     dataTypeBox.current(0)
 
-    submitColName = Button(app, text="Submit column name",
+    submitColName = tk.Button(app, text="Submit column name",
                         command=lambda: updateColName(entryColumnBox, dataTypeBox, index))
     submitColName.place(x=position_x, y=position_y + 85)
 
-    saveColData = Button(app, text="save pointer file (.dat)",
+    saveColData = tk.Button(app, text="save pointer file (.dat)",
                         command=lambda: writeFile(realCoords))
     saveColData.place(x=position_x + 100, y=position_y + 260)
     
@@ -259,7 +257,7 @@ def setupFormCanva(imgPath):
     formCanv.create_image(10, 10, image=image, anchor="nw")
     
 # create an window, size varied on monitor.
-app = Tk()
+app = tk.Tk()
 app.title('Optical Form Recognition - Pointer')
 width, height = app.winfo_screenwidth(), app.winfo_screenheight()
 winWidth = int(width * 0.6)
@@ -270,7 +268,7 @@ app.geometry(f"{winWidth}x{winHeight}+0+0")
 formHeight = winHeight-20
 formWidth = int(formHeight/1.414213)
 
-formCanv = Canvas(app)
+formCanv = tk.Canvas(app)
 formCanv.pack(anchor="nw")
 formCanv.bind("<Button-1>", get_xy)
 formCanv.bind("<Button-3>", del_element)

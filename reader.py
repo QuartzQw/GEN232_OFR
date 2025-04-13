@@ -1,6 +1,4 @@
-from tkinter import *
-from tkinter import ttk
-from tkinter import filedialog
+import tkinter as tk
 import glob
 import os
 from PIL import Image, ImageTk
@@ -14,11 +12,11 @@ templateDict = {}
 
 def getFilePath(entry):
     """ open pointer file """
-    entry.delete(0, END)
+    entry.delete(0, tk.END)
     if 'templateTextBox' in globals() and templateTextBox:
-        templateTextBox.delete(1.0, END)
+        templateTextBox.delete(1.0, tk.END)
     
-    templateDir = filedialog.askopenfilename(filetypes=[('DAT', '.dat')], initialdir='./')
+    templateDir = tk.filedialog.askopenfilename(filetypes=[('DAT', '.dat')], initialdir='./')
     entry.insert(0, templateDir)
     
     if templateDir:
@@ -29,13 +27,13 @@ def getFilePath(entry):
                 templateTextBox.insert(2.0, realCoords)
 
 def getFolderPath(entry):
-    entry.delete(0,END)
-    fileNameTextBox.delete(0,END)
-    folderDir = filedialog.askdirectory()
+    entry.delete(0, tk.END)
+    fileNameTextBox.delete(0, tk.END)
+    folderDir = tk.filedialog.askdirectory()
     entry.insert(0, folderDir)
     fileNames = glob.glob(f"{folderDir}/*.jpg")
     for name in fileNames:
-        fileNameTextBox.insert(END, name)
+        fileNameTextBox.insert(tk.END, name)
     # ttk.Label(root, text=folderDir).grid(column=4, row=2)
 
 def getEntriesValues(*entries):
@@ -49,11 +47,11 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     templateDir, folderDir = entryCoordTemplate.get(), entryTargetFolder.get()
     
     if not os.path.exists(templateDir):
-        print("ไม่พบไฟล์พิกัด (.dat) กรุณาเลือกใหม่")
+        tk.messagebox.showinfo(title = "System", message = "ไม่พบไฟล์พิกัด (.dat) กรุณาเลือกใหม่")
         return
 
     if not os.path.exists(folderDir):
-        print("ไม่พบโฟลเดอร์รูปภาพ กรุณาเลือกใหม่")
+        tk.messagebox.showinfo(title = "System", message = "ไม่พบโฟลเดอร์รูปภาพ กรุณาเลือกใหม่")
         return
 
     # สร้างโฟลเดอร์สำหรับเก็บไฟล์ Excel
@@ -90,46 +88,35 @@ def open_image_viewer():
     ImageViewer(root, folder_path, latest_excel)
 
 
-root = Tk()
-root.title("Optical Form Recognition")
+root = tk.Tk()
+root.title("Optical Form Recognition - Reader")
 root.geometry("720x360+0+0")
 
-tab = Menu() 
-root.config(menu=tab)
-
-subTabTemplate = Menu()
-# subTabTemplate.add_command(label = "new template")
-# subTabTemplate.add_command(label = "edit template", command=openEditTemplateWindow)
-# subTabTemplate.add_command(label = "generate docx from json", command=genDocFromJson)
-# subTabTemplate.add_command(label = "embed coord to docx")
-
-tab.add_cascade(label="Template", menu = subTabTemplate)
-
-templateTextBox = Text(root, width=40, height=10)
+templateTextBox = tk.Text(root, width=40, height=10)
 templateTextBox.place(x=40, y=100)
 
-entryCoordTemplate = Entry(root, width = 70)
+entryCoordTemplate = tk.Entry(root, width = 70)
 entryCoordTemplate.place(x = 250, y = 10)
-Label(root, text="Upload form template").place(x = 10, y = 10)
-btnFind = Button(root, text="Upload",command = lambda:getFilePath(entryCoordTemplate))
+tk.Label(root, text="Upload form template").place(x = 10, y = 10)
+btnFind = tk.Button(root, text="Upload",command = lambda:getFilePath(entryCoordTemplate))
 btnFind.place(x = 150, y = 5)
 
-entryTargetFolder = Entry(root, width = 70)
+entryTargetFolder = tk.Entry(root, width = 70)
 entryTargetFolder.place(x = 250, y = 40)
-Label(root, text="Select written form folder").place(x = 10, y = 40)
-btnFind = Button(root, text="Open Folder...",command = lambda:getFolderPath(entryTargetFolder))
+tk.Label(root, text="Select written form folder").place(x = 10, y = 40)
+btnFind = tk.Button(root, text="Open Folder...",command = lambda:getFolderPath(entryTargetFolder))
 btnFind.place(x = 150, y = 35)
 
-Label(root, text="template file (.json):").place(x = 10, y = 75)
-templateTextBox = Text(root, width = 40, height = 10)
+tk.Label(root, text="template file (.json):").place(x = 10, y = 75)
+templateTextBox = tk.Text(root, width = 40, height = 10)
 templateTextBox.place(x = 40, y = 100)
 
-Label(root, text="file(s) in target path:").place(x = 380, y = 75)
-fileNameTextBox = Listbox(root, width = 40, height = 10)
+tk.Label(root, text="file(s) in target path:").place(x = 380, y = 75)
+fileNameTextBox = tk.Listbox(root, width = 40, height = 10)
 fileNameTextBox.place(x = 410, y = 100)
 
-Button(root, text="Submit", command=lambda:readMainPage(entryCoordTemplate, entryTargetFolder), height= 2, width = 10).place(x = 300, y = 280)
-Button(root, text="Quit", command=root.destroy, height = 2, width = 10).place(x = 400, y = 280)
-Button(root, text="Open Image Viewer", command=open_image_viewer, height=2, width=15).place(x=550, y=280)
+tk.Button(root, text="Submit", command=lambda:readMainPage(entryCoordTemplate, entryTargetFolder), height= 2, width = 10).place(x = 300, y = 280)
+tk.Button(root, text="Quit", command=root.destroy, height = 2, width = 10).place(x = 400, y = 280)
+tk.Button(root, text="Open Image Viewer", command=open_image_viewer, height=2, width=15).place(x=550, y=280)
 
 root.mainloop()
