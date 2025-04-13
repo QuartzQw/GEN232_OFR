@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog, ttk
 import glob
 import os
 from PIL import Image, ImageTk
@@ -16,7 +17,7 @@ def getFilePath(entry):
     if 'templateTextBox' in globals() and templateTextBox:
         templateTextBox.delete(1.0, tk.END)
     
-    templateDir = tk.filedialog.askopenfilename(filetypes=[('DAT', '.dat')], initialdir='./')
+    templateDir = filedialog.askopenfilename(filetypes=[('DAT', '.dat')], initialdir='./')
     entry.insert(0, templateDir)
     
     if templateDir:
@@ -29,7 +30,7 @@ def getFilePath(entry):
 def getFolderPath(entry):
     entry.delete(0, tk.END)
     fileNameTextBox.delete(0, tk.END)
-    folderDir = tk.filedialog.askdirectory()
+    folderDir = filedialog.askdirectory()
     entry.insert(0, folderDir)
     fileNames = glob.glob(f"{folderDir}/*.jpg")
     for name in fileNames:

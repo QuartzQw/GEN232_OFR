@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
 from autoTrack import scan
 import pickle
@@ -21,7 +22,7 @@ def getFilePath(entry):
     """ After click upload empty template button, This function will insert target path into entry box for showing"""
     global imgPath
     entry.delete(0, tk.END)
-    templateDir = tk.filedialog.askopenfilename(
+    templateDir = filedialog.askopenfilename(
         filetypes=[('JPEG', '.jpg')], initialdir='./')
     entry.insert(0, templateDir)
     imgPath = templateDir
@@ -234,7 +235,7 @@ def updateColumnDetail_block(position_x, position_y):
     entryColumnBox.place(x=position_x + 120, y=position_y + 5)
     
     tk.Label(app, text="Data Type:", font=font).place(x=position_x, y=position_y+30)
-    dataTypeBox = tk.ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
+    dataTypeBox = ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
     dataTypeBox.place(x=position_x + 120, y=position_y + 35)
     dataTypeBox.current(0)
 
