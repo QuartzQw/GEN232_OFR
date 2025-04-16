@@ -42,10 +42,10 @@ def scan(filePath, **kwargs):
             x,y,w,h = cv2.boundingRect(c)
             ratio = w/h
             if (1.2 >= ratio >= 0.8): 
-                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"checkBox","-"])
+                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"checkBox",len(coords)])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,12), 2)
             elif(ratio > 1.2):
-                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"text","-"])
+                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"text",len(coords)])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
 
     return coords
