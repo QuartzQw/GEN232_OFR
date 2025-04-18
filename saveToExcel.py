@@ -14,12 +14,9 @@ from aspose.cells import Workbook
 
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
-## หนูเปลี่ยนชื่อตัวแปร เผื่อจะพิ่มโมเดลตัวเลขนะคะ
 # text_model_name = "trocrOriginal"
 # text_proc_path = f"./pretrained/{text_model_name}/processor"
 # text_model_path = f"./pretrained/{text_model_name}/model"
-
-# THRESHOLD = 220  # Threshold for checkbox detection
 
 # Load text OCR model
 # text_processor = TrOCRProcessor.from_pretrained(text_model_path)
@@ -123,22 +120,20 @@ def classify_handwritten_digits(cropped_image):
     
     return int(''.join(str(x) for x in predictions))
 
-def extract_text_from_image(cropped_image):
-    """Extract general text from image using TrOCR"""
+# def extract_text_from_image(cropped_image):
+    # """Extract general text from image using TrOCR"""
 
     # pixel_values = text_processor(images=cropped_image, return_tensors="pt").pixel_values
     # generated_ids = text_model.generate(pixel_values)
     # text = text_processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
     
     # return text.strip()
-    return "testText"
+    # return "testText"
 
-#########################
 def extract_number_from_image(cropped_image):
     """Extract numbers (int) from image using text model and keep digits only"""
     predictions = classify_handwritten_digits(cropped_image)
     return predictions
-#########################
 
 def is_checkbox_checked(cropped_image):
     """Check if a checkbox is ticked based on threshold"""
@@ -152,14 +147,12 @@ def is_checkbox_checked(cropped_image):
     total_pixels = width * height
     return 1 if black_pixels > 0.5*total_pixels else 0
 
-###############
 def crop_image_to_path(cropped_image, save_dir, field_name, image_index):
     """Crop image at the given coordinates and save to path"""
     os.makedirs(save_dir, exist_ok=True)
     file_path = os.path.join(save_dir, f"{field_name}_{image_index}.png")
     cropped_image.save(file_path)
     return file_path
-################
 
 def process_survey(image_folder, templateDir, output_file, image_save_folder):
     """Scan multiple images and save results to an Excel file and cropped image folder"""
@@ -221,20 +214,6 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
                     column = to_excel(i+1)
                     cell_address = f"{column}{index + 2}"
                     ws.embed_image(cell_address, item)
-
-    
-    # workbook = Workbook()
-    # worksheet = workbook.worksheets[0]
-    # for index, row in df.iterrows():
-    #     for i, item in enumerate(row):
-    #         if type(item) != int:
-    #             column = to_excel(i+1)
-    #             cell_address = f"{column}{index + 2}"
-    #             print(cell_address, item)
-    #             cell = worksheet.cells.get(cell_address)
-    #             cell.embedded_image = open(item, "rb").read()
-    
-    # workbook.save(output_file)
         
     files = os.listdir('tempArea/')
     for f in files:
