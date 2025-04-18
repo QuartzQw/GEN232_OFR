@@ -10,6 +10,7 @@ from openpyxl.drawing.image import Image as opxImage
 import glob
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
+from aspose.cells import Workbook
 
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
@@ -193,7 +194,7 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
             if field_type == "checkBox":
                 extracted_data[field_name] = is_checkbox_checked(cropped_image=cropped_image)
             elif field_type == "text":
-                extract_text_from_image(cropped_image)
+                # extract_text_from_image(cropped_image)
                 fName = f"./tempArea/{row}_{col}.jpg"
                 im1 = cropped_image.save(fName)
                 extracted_data[coordinates[5]] = fName
@@ -209,7 +210,7 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
         
     
     df = pd.DataFrame(all_data)
-    with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
+    with pd.ExcelWriter(output_file, engine="xlsxwriter") as writer:
         df.to_excel(writer, index=False, startrow=0)
         ws = writer.sheets["Sheet1"]
         
@@ -217,15 +218,23 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
         for index, row in df.iterrows():
             for i, item in enumerate(row):
                 if type(item) != int:
-                    # print(item)
-                    img = opxImage(item)
-                    img.width = 72
-                    img.height = 18
                     column = to_excel(i+1)
                     cell_address = f"{column}{index + 2}"
-                    ws.cell(row = index+2, column= i+1).value = " " #
-                    img.anchor = cell_address
-                    ws.add_image(img)
+                    ws.embed_image(cell_address, item)
+
+    
+    # workbook = Workbook()
+    # worksheet = workbook.worksheets[0]
+    # for index, row in df.iterrows():
+    #     for i, item in enumerate(row):
+    #         if type(item) != int:
+    #             column = to_excel(i+1)
+    #             cell_address = f"{column}{index + 2}"
+    #             print(cell_address, item)
+    #             cell = worksheet.cells.get(cell_address)
+    #             cell.embedded_image = open(item, "rb").read()
+    
+    # workbook.save(output_file)
         
     files = os.listdir('tempArea/')
     for f in files:
