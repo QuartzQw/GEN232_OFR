@@ -166,7 +166,7 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
         os.makedirs("./tempArea")
 
     with open(templateDir, "rb") as f:
-        realCoords = pickle.load(f)
+        realCoords = pickle.load(f)[::-1]
     
     image_paths = [os.path.join(image_folder, f) for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
     all_data = []
