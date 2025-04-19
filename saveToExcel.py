@@ -5,12 +5,12 @@ import numpy as np
 from PIL import Image, ImageDraw
 import pickle
 import string
-from openpyxl import Workbook
-from openpyxl.drawing.image import Image as opxImage
-import glob
+# from openpyxl import Workbook
+# from openpyxl.drawing.image import Image as opxImage
+# import glob
+from datetime import datetime
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
-from aspose.cells import Workbook
 
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
@@ -154,10 +154,13 @@ def crop_image_to_path(cropped_image, save_dir, field_name, image_index):
     cropped_image.save(file_path)
     return file_path
 
-def process_survey(image_folder, templateDir, output_file, image_save_folder):
+def process_survey(image_folder, templateDir, excel_folder):
     """Scan multiple images and save results to an Excel file and cropped image folder"""
-    if not os.path.exists("./tempArea"):
-        os.makedirs("./tempArea")
+    # กำหนดชื่อไฟล์ Excel ตามวันที่ปัจจุบัน
+    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    output_file = os.path.join(excel_folder, f"output-{current_time}.xlsx")
+    
+    os.makedirs(f"./tempArea/images-{current_time}")
 
     with open(templateDir, "rb") as f:
         realCoords = pickle.load(f)[::-1]
@@ -194,7 +197,11 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
             elif field_type == "int":
                 extracted_data[field_name] = extract_number_from_image(cropped_image = cropped_image)
             elif field_type == "image":
-                extracted_data[field_name] = crop_image_to_path(cropped_image, image_save_folder, field_name, image_index)
+                # extracted_data[field_name] = crop_image_to_path(cropped_image, image_save_folder, field_name, image_index)
+                tableName = f"./tempArea/images-{current_time}/{row}_{col}_image.jpg"
+                im1 = cropped_image.save(tableName)
+                extracted_data[coordinates[5]] = tableName
+
             col += 1
 
         all_data.append(extracted_data)
@@ -213,8 +220,13 @@ def process_survey(image_folder, templateDir, output_file, image_save_folder):
                 if type(item) != int:
                     column = to_excel(i+1)
                     cell_address = f"{column}{index + 2}"
-                    ws.embed_image(cell_address, item)
-        
+                    if "image" not in item:
+                        ws.embed_image(cell_address, item)
+                    else:
+                        ws.write_url(cell_address, f"external:{os.path.abspath(item)}", string="Link")
+                        
+                    
     files = os.listdir('tempArea/')
     for f in files:
-        os.remove(f"tempArea/{f}")
+        if(f[-3:] == "jpg"):
+            os.remove(f"tempArea/{f}")

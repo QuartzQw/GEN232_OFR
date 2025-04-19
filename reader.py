@@ -59,13 +59,8 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     excel_folder = "./excelCollector"
     if not os.path.exists(excel_folder):
         os.makedirs(excel_folder)
-    
-    # กำหนดชื่อไฟล์ Excel ตามวันที่ปัจจุบัน
-    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_excel = os.path.join(excel_folder, f"output-{current_time}.xlsx")
 
-    image_save_folder = "./cropped_images"
-    process_survey(folderDir, templateDir, output_excel, image_save_folder)
+    process_survey(folderDir, templateDir, excel_folder)
 
 def open_image_viewer():
     """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """
