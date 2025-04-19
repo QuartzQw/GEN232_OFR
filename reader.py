@@ -60,7 +60,11 @@ def readMainPage(entryCoordTemplate, entryTargetFolder):
     if not os.path.exists(excel_folder):
         os.makedirs(excel_folder)
 
-    process_survey(folderDir, templateDir, excel_folder)
+    output_file = process_survey(folderDir, templateDir, excel_folder)
+    
+    if(output_file):
+        tk.messagebox.showinfo(title = "System", message = f"File xlsx written successfully at \n {os.path.abspath(output_file)}")
+        
 
 def open_image_viewer():
     """ เปิด ImageViewer และส่ง path ของไฟล์ Excel ล่าสุด """

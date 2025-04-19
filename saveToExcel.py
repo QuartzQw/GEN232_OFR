@@ -1,16 +1,16 @@
 import os
+
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import pandas as pd
 import cv2
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
 import pickle
 import string
-# from openpyxl import Workbook
-# from openpyxl.drawing.image import Image as opxImage
-# import glob
 from datetime import datetime
 from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import img_to_array
 
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 
@@ -96,9 +96,8 @@ def predict_digits(model, digits):
     predicted_digits = [np.argmax(pred) for pred in predictions]
     return predicted_digits
 
-def classify_handwritten_digits(cropped_image):
+def classify_handwritten_digits(model, cropped_image):
     """Main function to classify multiple handwritten digits in an image"""
-    model = load_model('mnist_cnn.h5')
 
         # Step 1: Preprocess the image
     processed_img = preprocess_image(cropped_image)
@@ -107,7 +106,6 @@ def classify_handwritten_digits(cropped_image):
     digit_rects = find_digits(processed_img)
     
     if not digit_rects:
-        print("No digits found in the image.")
         return
     
     # Step 3: Extract and prepare each digit
@@ -116,7 +114,7 @@ def classify_handwritten_digits(cropped_image):
     # Step 4: Predict digits
     predictions = predict_digits(model, digits)
     
-    print("Predicted digits:", predictions)
+    # print("Predicted digits:", predictions)
     
     return int(''.join(str(x) for x in predictions))
 
@@ -130,9 +128,9 @@ def classify_handwritten_digits(cropped_image):
     # return text.strip()
     # return "testText"
 
-def extract_number_from_image(cropped_image):
+def extract_number_from_image(model, cropped_image):
     """Extract numbers (int) from image using text model and keep digits only"""
-    predictions = classify_handwritten_digits(cropped_image)
+    predictions = classify_handwritten_digits(model, cropped_image)
     return predictions
 
 def is_checkbox_checked(cropped_image):
@@ -170,11 +168,13 @@ def process_survey(image_folder, templateDir, excel_folder):
 
     row = 1
     col = 0
+    model = load_model('mnist_cnn.h5')
 
     for image_index, image_path in enumerate(image_paths):
         image = Image.open(image_path)
         extracted_data = {}
 
+        print(f"------------- Scanning page : {row} --------------")
         for coordinates in realCoords:
             imageWidth, imageHeight = image.size
             coordinate = (
@@ -195,7 +195,7 @@ def process_survey(image_folder, templateDir, excel_folder):
                 im1 = cropped_image.save(fName)
                 extracted_data[coordinates[5]] = fName
             elif field_type == "int":
-                extracted_data[field_name] = extract_number_from_image(cropped_image = cropped_image)
+                extracted_data[field_name] = extract_number_from_image(model = model, cropped_image = cropped_image)
             elif field_type == "image":
                 # extracted_data[field_name] = crop_image_to_path(cropped_image, image_save_folder, field_name, image_index)
                 tableName = f"./tempArea/images-{current_time}/{row}_{col}_image.jpg"
@@ -217,7 +217,7 @@ def process_survey(image_folder, templateDir, excel_folder):
         # Embed images
         for index, row in df.iterrows():
             for i, item in enumerate(row):
-                if type(item) != int:
+                if type(item) == str:
                     column = to_excel(i+1)
                     cell_address = f"{column}{index + 2}"
                     if "image" not in item:
@@ -230,3 +230,5 @@ def process_survey(image_folder, templateDir, excel_folder):
     for f in files:
         if(f[-3:] == "jpg"):
             os.remove(f"tempArea/{f}")
+            
+    return output_file
