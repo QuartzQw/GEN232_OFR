@@ -171,6 +171,7 @@ cython_debug/
 .pypirc
 
 /pretrained
+/tempArea
 
 # IO files
 *.xlsx
