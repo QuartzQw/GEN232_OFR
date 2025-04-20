@@ -11,6 +11,7 @@ import pickle
 import string
 from datetime import datetime
 from tensorflow.keras.models import load_model
+import xlsxwriter
 
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
 

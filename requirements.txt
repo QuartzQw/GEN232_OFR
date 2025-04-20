@@ -1,9 +1,7 @@
-aspose_cells_python==25.4.0
-aspose_words==25.1.0
 matplotlib==3.10.1
 numpy==2.2.5
 opencv_python==4.10.0.84
 pandas==2.2.3
 Pillow==11.2.1
-python_docx==1.1.2
 tensorflow==2.19.0
+XlsxWriter==3.2.2
