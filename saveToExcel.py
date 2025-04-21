@@ -11,6 +11,7 @@ import pickle
 import string
 from datetime import datetime
 from tensorflow.keras.models import load_model
+import sys, os
 import xlsxwriter
 
 # from transformers import TrOCRProcessor, VisionEncoderDecoderModel, VisionEncoderDecoderConfig
@@ -169,7 +170,18 @@ def process_survey(image_folder, templateDir, excel_folder):
 
     row = 1
     col = 0
-    model = load_model('mnist_cnn.h5')
+
+    def resource_path(relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
+    model_path = resource_path('mnist_cnn.h5')
+    model = load_model(model_path)
+
+    # model = load_model('mnist_cnn.h5')
 
     for image_index, image_path in enumerate(image_paths):
         image = Image.open(image_path)
