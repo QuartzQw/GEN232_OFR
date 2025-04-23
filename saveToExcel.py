@@ -47,7 +47,10 @@ def preprocess_image(cropped_image):
     
     # Invert and threshold image (assuming black digits on white background)
     img = cv2.bitwise_not(img)
-    _, thresh = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    _, thresh = cv2.threshold(img, 85, 255, cv2.THRESH_BINARY)
+    
+    # cv2.imshow("", thresh)
+    # cv2.waitKey(0)
     
     return thresh
 
@@ -57,10 +60,14 @@ def find_digits(image):
     contours, _ = cv2.findContours(image.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     
     # Get bounding boxes for each contour
-    digit_rects = [cv2.boundingRect(contour) for contour in contours]
-    
+    # digit_rects = [cv2.boundingRect(contour) for contour in contours]
+    rects = []
+    for c in contours:
+        if cv2.contourArea(c) > 7:
+            rects.append(c)
+            
     # Sort bounding boxes from left to right
-    digit_rects.sort(key=lambda x: x[0])
+    digit_rects = sorted([cv2.boundingRect(c) for c in rects], key=lambda x: x[0])
     
     return digit_rects
 
@@ -133,19 +140,20 @@ def classify_handwritten_digits(model, cropped_image):
 def extract_number_from_image(model, cropped_image):
     """Extract numbers (int) from image using text model and keep digits only"""
     predictions = classify_handwritten_digits(model, cropped_image)
+    # print(predictions)
     return predictions
 
 def is_checkbox_checked(cropped_image):
     """Check if a checkbox is ticked based on threshold"""
     # Convert to grayscale and apply threshold
     img_np = np.array(cropped_image.convert("L"))
-    _, thresholded = cv2.threshold(img_np, 200, 255, cv2.THRESH_BINARY_INV)
+    _, thresholded = cv2.threshold(img_np, 125, 255, cv2.THRESH_BINARY_INV)
     
     # Calculate percentage of black pixels
     black_pixels = np.sum(thresholded == 255)
     width, height = img_np.shape
     total_pixels = width * height
-    return 1 if black_pixels > 0.5*total_pixels else 0
+    return 1 if black_pixels > 0.45*total_pixels else 0
 
 def crop_image_to_path(cropped_image, save_dir, field_name, image_index):
     """Crop image at the given coordinates and save to path"""

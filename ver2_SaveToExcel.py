@@ -26,12 +26,17 @@ def preprocess_image(cropped_image):
     img = cropped_image.convert('L')
     img = np.array(img)
     img = cv2.bitwise_not(img)
-    _, thresh = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+    _, thresh = cv2.threshold(img, 82, 255, cv2.THRESH_BINARY)
     return thresh
 
 def find_digits(image):
     contours, _ = cv2.findContours(image.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    digit_rects = sorted([cv2.boundingRect(c) for c in contours], key=lambda x: x[0])
+    # digit_rects = sorted([cv2.boundingRect(c) for c in contours], key=lambda x: x[0])
+    rects = []
+    for c in contours:
+        if cv2.contourArea(c) > 7:
+            rects.append(c)
+    digit_rects = sorted([cv2.boundingRect(c) for c in rects], key=lambda x: x[0])
     return digit_rects
 
 def extract_digits(image, digit_rects, padding=5):
@@ -69,7 +74,7 @@ def extract_number_from_image(cropped_image):
 
 def is_checkbox_checked(cropped_image):
     img_np = np.array(cropped_image.convert("L"))
-    _, binary = cv2.threshold(img_np, 200, 255, cv2.THRESH_BINARY_INV)
+    _, binary = cv2.threshold(img_np, 125, 255, cv2.THRESH_BINARY_INV)
     black_pixels = np.sum(binary == 255)
     return 1 if black_pixels > 0.45 * binary.size else 0
 
