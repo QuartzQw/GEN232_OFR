@@ -228,10 +228,10 @@ scaleLength = winWidth - formWidth - 350
 
 def uploadTemplate_block():
     tk.Label(app, text="Upload template", font=font).place(x=xAuto, y=yAuto)
-    entryCoordTemplate = tk.Entry(app, width=40)
-    entryCoordTemplate.place(x=xAuto + 60, y=yAuto + 40)
-    tk.Button(app, text="Upload", command=lambda: handleFileInput(entryCoordTemplate, setupFormCanva)).place(x=xAuto, y=yAuto + 40)
-    tk.Button(app, text="Load .dat", command=loadPointerFile).place(x=xAuto, y=yAuto + 80)
+    entryCoordTemplate = tk.Entry(app, width=60)
+    entryCoordTemplate.place(x=xAuto, y=yAuto + 40)
+    tk.Button(app, text="Upload template (.pdf/.jpeg)", command=lambda: handleFileInput(entryCoordTemplate, setupFormCanva)).place(x=xAuto, y=yAuto + 80)
+    tk.Button(app, text="Load pointer file (.dat)", command=loadPointerFile).place(x=xAuto + 200, y=yAuto + 80)
 
 def tuneParameter_block():
     tk.Label(app, text="Parameter tuning", font=font).place(x=xAuto, y=yAuto + 120)
@@ -255,23 +255,23 @@ def tuneParameter_block():
     resolution.set(3)
     resolution.place(x=xAuto + 80, y=yAuto + 260)
 
-    tk.Button(app, text="Auto detect", command=lambda: autoDetectPress(imgPath=pdfPages[currentPage], imgWidth=formWidth, imgHeight=formHeight, blockSize=blockSize, cVal=cVal, minArea=minArea, resolution=resolution)).place(x=xAuto, y=yAuto + 300)
-    tk.Button(app, text="< Previous", command=lambda: goToPage(-1)).place(x=xAuto + 200, y=yAuto + 300)
-    tk.Button(app, text="Next >", command=lambda: goToPage(1)).place(x=xAuto + 280, y=yAuto + 300)
+    tk.Button(app, text="Auto detect", command=lambda: autoDetectPress(imgPath=pdfPages[currentPage], imgWidth=formWidth, imgHeight=formHeight, blockSize=blockSize, cVal=cVal, minArea=minArea, resolution=resolution)).place(x=xAuto, y=yAuto + 320)
+    tk.Button(app, text="< Previous", command=lambda: goToPage(-1)).place(x=xAuto + 200, y=yAuto + 320)
+    tk.Button(app, text="Next >", command=lambda: goToPage(1)).place(x=xAuto + 280, y=yAuto + 320)
 
 def updateColumnDetail_block():
     global entryColumnBox, dataTypeBox
-    tk.Label(app, text="Column name:", font=font).place(x=xAuto, y=yAuto + 360)
+    tk.Label(app, text="Column name:", font=font).place(x=xAuto, y=yAuto + 400)
     entryColumnBox = tk.Entry(app, width=30)
-    entryColumnBox.place(x=xAuto + 120, y=yAuto + 365)
+    entryColumnBox.place(x=xAuto + 120, y=yAuto + 405)
 
-    tk.Label(app, text="Data Type:", font=font).place(x=xAuto, y=yAuto + 390)
+    tk.Label(app, text="Data Type:", font=font).place(x=xAuto, y=yAuto + 430)
     dataTypeBox = ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
     dataTypeBox.current(0)
-    dataTypeBox.place(x=xAuto + 120, y=yAuto + 395)
+    dataTypeBox.place(x=xAuto + 120, y=yAuto + 435)
 
-    tk.Button(app, text="Submit column name", command=lambda: updateColName(entryColumnBox, dataTypeBox, index) if index >= 0 else messagebox.showwarning("Warning", "Please select a box first.")).place(x=xAuto, y=yAuto + 440)
-    tk.Button(app, text="Save .dat", command=writeFile).place(x=xAuto + 150, y=yAuto + 440)
+    tk.Button(app, text="Submit column name", command=lambda: updateColName(entryColumnBox, dataTypeBox, index) if index >= 0 else messagebox.showwarning("Warning", "Please select a box first.")).place(x=xAuto, y=yAuto + 480)
+    tk.Button(app, text="Save .dat", command=writeFile).place(x=xAuto + 150, y=yAuto + 480)
 
 uploadTemplate_block()
 tuneParameter_block()
