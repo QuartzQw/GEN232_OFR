@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
 from autoTrack import scan
 import pickle
@@ -261,13 +261,17 @@ def setupFormCanva(imgPath):
 app = tk.Tk()
 app.title('Optical Form Recognition - Pointer')
 width, height = app.winfo_screenwidth(), app.winfo_screenheight()
-winWidth = int(width * 0.6)
-winHeight = int(height * 0.9)
+winWidth = int(width * 0.7)
+winHeight = int(height * 0.8)
 app.geometry(f"{winWidth}x{winHeight}+0+0")
 
-# calculate A4 form area
-formHeight = winHeight-20
-formWidth = int(formHeight/1.414213)
+isProtrait = messagebox.askquestion("System", "ฟอร์มขนาดแนวตั้งใช่ หรือไม่")
+if(isProtrait == "yes"):
+    formHeight = winHeight - 20
+    formWidth = int(formHeight / 1.414213)
+else:
+    formWidth = winHeight - 20
+    formHeight = int(formWidth / 1.414213) 
 
 formCanv = tk.Canvas(app)
 formCanv.pack(anchor="nw")

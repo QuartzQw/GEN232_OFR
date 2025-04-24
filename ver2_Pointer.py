@@ -212,8 +212,15 @@ width, height = app.winfo_screenwidth(), app.winfo_screenheight()
 winWidth = int(width * 0.7)
 winHeight = int(height * 0.8)
 app.geometry(f"{winWidth}x{winHeight}+0+0")
-formHeight = winHeight - 20
-formWidth = int(formHeight / 1.414213)
+
+isProtrait = messagebox.askquestion("System", "ฟอร์มขนาดแนวตั้งใช่ หรือไม่")
+if(isProtrait == "yes"):
+    formHeight = winHeight - 20
+    formWidth = int(formHeight / 1.414213)
+else:
+    formWidth = winHeight - 20
+    formHeight = int(formWidth / 1.414213) 
+
 
 formCanv = tk.Canvas(app, width=formWidth, height=formHeight, bg="white")
 formCanv.pack(side="left", padx=10, pady=10)
