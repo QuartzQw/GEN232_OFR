@@ -136,14 +136,14 @@ def process_survey(image_folder, template_file, output_file, offset_map=None, sh
                     ftype, fname = coord[4], str(coord[5])
                     if ftype == "checkBox":
                         batch_result[fname] = is_checkbox_checked(crop)
-                    elif ftype == "text":
+                    elif ftype == "image":
                         unique = uuid4().hex[:6]
                         path = os.path.join(temp_img_folder, f"page{page_idx}_{fname}_{unique}.jpg")
                         crop.save(path)
                         batch_result[fname] = path.replace("\\", "/")
                     elif ftype == "number":
                         batch_result[fname] = extract_number_from_image(crop)
-                    elif ftype == "image":
+                    elif ftype == "imageLink":
                         batch_result[fname] = crop_and_save_image(crop, coord, temp_img_folder, fname, img_idx).replace("\\", "/")
                 except Exception as e:
                     print(f"[ERROR] Page {page_idx}, Field {coord}: {e}")

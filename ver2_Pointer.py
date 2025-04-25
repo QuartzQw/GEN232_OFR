@@ -91,7 +91,7 @@ def drawAllRect(coords):
     formCanv.delete("all")
     formCanv.create_image(0, 0, image=image, anchor="nw")
     for rect in coords:
-        color = {"number": "green", "text": "blue", "checkBox": "red", "image": "purple"}.get(rect[4], "black")
+        color = {"number": "green", "image": "blue", "checkBox": "red", "imageLink": "purple"}.get(rect[4], "black")
         formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width=2, outline=color)
 
 def searchRect(x, y):
@@ -117,7 +117,7 @@ def get_xy(event):
         else:
             x1, x2 = sorted([ix, event.x])
             y1, y2 = sorted([iy, event.y])
-            box_type = "checkBox" if 0.8 <= (x2 - x1) / (y2 - y1) <= 1.2 else "text"
+            box_type = "checkBox" if 0.8 <= (x2 - x1) / (y2 - y1) <= 1.2 else "image"
             undoStack.append((copy.deepcopy(coords), copy.deepcopy(realCoords)))
             field_index = len(realCoords)
             field_name = f"page_{currentPage}_{field_index}"
@@ -271,7 +271,7 @@ def updateColumnDetail_block():
     entryColumnBox.place(x=xAuto + 120, y=yAuto + 405)
 
     tk.Label(app, text="Data Type:", font=font).place(x=xAuto, y=yAuto + 430)
-    dataTypeBox = ttk.Combobox(app, values=["text", "number", "checkBox", "image"])
+    dataTypeBox = ttk.Combobox(app, values=["image", "number", "checkBox", "imageLink"])
     dataTypeBox.current(0)
     dataTypeBox.place(x=xAuto + 120, y=yAuto + 435)
 

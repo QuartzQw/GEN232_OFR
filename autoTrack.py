@@ -45,7 +45,7 @@ def scan(filePath, **kwargs):
                 coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"checkBox",len(coords)])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (255,255,12), 2)
             elif(ratio > 1.2):
-                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"text",len(coords)])
+                coords.append([x / imageWidth,y / imageHeight ,(x+w) / imageWidth,(y+h)/ imageHeight,"image",len(coords)])
                 # cv2.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
 
     return coords

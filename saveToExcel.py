@@ -210,14 +210,14 @@ def process_survey(image_folder, templateDir, excel_folder):
 
             if field_type == "checkBox":
                 extracted_data[field_name] = is_checkbox_checked(cropped_image=cropped_image)
-            elif field_type == "text":
+            elif field_type == "image":
                 # extract_text_from_image(cropped_image)
                 fName = f"./tempArea/{row}_{col}.jpg"
                 im1 = cropped_image.save(fName)
                 extracted_data[coordinates[5]] = fName
             elif field_type == "number":
                 extracted_data[field_name] = extract_number_from_image(model = model, cropped_image = cropped_image)
-            elif field_type == "image":
+            elif field_type == "imageLink":
                 # extracted_data[field_name] = crop_image_to_path(cropped_image, image_save_folder, field_name, image_index)
                 tableName = f"./tempArea/images-{current_time}/{row}_{col}_image.jpg"
                 im1 = cropped_image.save(tableName)
@@ -241,7 +241,7 @@ def process_survey(image_folder, templateDir, excel_folder):
                 if type(item) == str:
                     column = to_excel(i+1)
                     cell_address = f"{column}{index + 2}"
-                    if "image" not in item:
+                    if "imageLink" not in item:
                         ws.embed_image(cell_address, item)
                     else:
                         ws.write_url(cell_address, f"external:{os.path.abspath(item)}", string="Link")

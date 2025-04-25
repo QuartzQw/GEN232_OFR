@@ -82,7 +82,7 @@ def get_xy(event):
             drawStat = True
         # secod time click
         else:
-            choiceType = "text"
+            choiceType = "image"
             if (1.2 >= (event.x - ix)/(event.y - iy) >= 0.8):
                 choiceType = "checkBox"
             coords.append([ix,                  iy,             event.x,            event.y,            choiceType, len(coords)])
@@ -235,7 +235,7 @@ def updateColumnDetail_block(position_x, position_y):
     entryColumnBox.place(x=position_x + 120, y=position_y + 5)
     
     tk.Label(app, text="Data Type:", font=font).place(x=position_x, y=position_y+30)
-    dataTypeBox = ttk.Combobox(app, values=["text", "number", "checkBox", "image"])
+    dataTypeBox = ttk.Combobox(app, values=["image", "number", "checkBox", "imageLink"])
     dataTypeBox.place(x=position_x + 120, y=position_y + 35)
     dataTypeBox.current(0)
 
