@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import filedialog, ttk, messagebox
 from PIL import Image, ImageTk
@@ -92,7 +91,7 @@ def drawAllRect(coords):
     formCanv.delete("all")
     formCanv.create_image(0, 0, image=image, anchor="nw")
     for rect in coords:
-        color = {"int": "green", "text": "blue", "checkBox": "red", "image": "purple"}.get(rect[4], "black")
+        color = {"number": "green", "text": "blue", "checkBox": "red", "image": "purple"}.get(rect[4], "black")
         formCanv.create_rectangle(rect[0], rect[1], rect[2], rect[3], width=2, outline=color)
 
 def searchRect(x, y):
@@ -175,7 +174,7 @@ def updateColName(entry, box, idx):
     if 0 <= idx < len(coords):
         name = entry.get()
         dtype = box.get()
-        model = "trocr" if dtype == "text" else "digits-ocr" if dtype == "int" else None
+        model = "trocr" if dtype == "text" else "digits-ocr" if dtype == "number" else None
         undoStack.append((copy.deepcopy(coords), copy.deepcopy(realCoords)))
         coords[idx][4], coords[idx][5] = dtype, name
         realCoords[idx][4], realCoords[idx][5], realCoords[idx][6] = dtype, name, model
@@ -220,7 +219,6 @@ if(isProtrait == "yes"):
 else:
     formWidth = winHeight - 20
     formHeight = int(formWidth / 1.414213) 
-
 
 formCanv = tk.Canvas(app, width=formWidth, height=formHeight, bg="white")
 formCanv.pack(side="left", padx=10, pady=10)
@@ -273,7 +271,7 @@ def updateColumnDetail_block():
     entryColumnBox.place(x=xAuto + 120, y=yAuto + 405)
 
     tk.Label(app, text="Data Type:", font=font).place(x=xAuto, y=yAuto + 430)
-    dataTypeBox = ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
+    dataTypeBox = ttk.Combobox(app, values=["text", "number", "checkBox", "image"])
     dataTypeBox.current(0)
     dataTypeBox.place(x=xAuto + 120, y=yAuto + 435)
 

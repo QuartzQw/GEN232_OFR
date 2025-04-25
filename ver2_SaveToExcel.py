@@ -141,7 +141,7 @@ def process_survey(image_folder, template_file, output_file, offset_map=None, sh
                         path = os.path.join(temp_img_folder, f"page{page_idx}_{fname}_{unique}.jpg")
                         crop.save(path)
                         batch_result[fname] = path.replace("\\", "/")
-                    elif ftype == "int":
+                    elif ftype == "number":
                         batch_result[fname] = extract_number_from_image(crop)
                     elif ftype == "image":
                         batch_result[fname] = crop_and_save_image(crop, coord, temp_img_folder, fname, img_idx).replace("\\", "/")

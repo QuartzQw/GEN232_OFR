@@ -199,7 +199,7 @@ def open_overlay_window():
             y1 = coord[1] * h + y_off
             x2 = coord[2] * w + x_off
             y2 = coord[3] * h + y_off
-            color = "blue" if coord[4] == "text" else "green" if coord[4] == "int" else "red"
+            color = "blue" if coord[4] == "text" else "green" if coord[4] == "number" else "red"
             draw.rectangle([x1, y1, x2, y2], outline=color, width=2)
 
         resized_img = img.resize((int(w * zoom_scale), int(h * zoom_scale)))

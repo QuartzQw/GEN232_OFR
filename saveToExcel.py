@@ -215,7 +215,7 @@ def process_survey(image_folder, templateDir, excel_folder):
                 fName = f"./tempArea/{row}_{col}.jpg"
                 im1 = cropped_image.save(fName)
                 extracted_data[coordinates[5]] = fName
-            elif field_type == "int":
+            elif field_type == "number":
                 extracted_data[field_name] = extract_number_from_image(model = model, cropped_image = cropped_image)
             elif field_type == "image":
                 # extracted_data[field_name] = crop_image_to_path(cropped_image, image_save_folder, field_name, image_index)

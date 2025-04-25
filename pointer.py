@@ -145,7 +145,7 @@ def updateColName(entry, dataTypeBox, index):
     """This function will insert model type to box position data"""
     colName = entry.get()
     data_type = dataTypeBox.get()
-    model_type = "trocr" if data_type == "text" else "digits-ocr" if data_type == "int" else None
+    model_type = "trocr" if data_type == "text" else "digits-ocr" if data_type == "number" else None
 
     has_col_name = coords[index][5] != colName
     has_data_type = coords[index][4] != data_type
@@ -235,7 +235,7 @@ def updateColumnDetail_block(position_x, position_y):
     entryColumnBox.place(x=position_x + 120, y=position_y + 5)
     
     tk.Label(app, text="Data Type:", font=font).place(x=position_x, y=position_y+30)
-    dataTypeBox = ttk.Combobox(app, values=["text", "int", "checkBox", "image"])
+    dataTypeBox = ttk.Combobox(app, values=["text", "number", "checkBox", "image"])
     dataTypeBox.place(x=position_x + 120, y=position_y + 35)
     dataTypeBox.current(0)
 
