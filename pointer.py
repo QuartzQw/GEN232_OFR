@@ -170,16 +170,37 @@ def updateColName(entry, dataTypeBox, index):
 
     # writeFile(realCoords)
 
+def smart_sort(rects, line_threshold=0.002):
+    rects = sorted(rects, key=lambda r: (r[1], r[0]))  # Sort by Y first, then X
+    grouped = []
+    current_line = []
+    last_y = None
+
+    for r in rects:
+        if last_y is None or abs(r[1] - last_y) > line_threshold:
+            if current_line:
+                grouped.append(sorted(current_line, key=lambda r: r[0]))
+            current_line = [r]
+            last_y = r[1]
+        else:
+            current_line.append(r)
+
+    if current_line:
+        grouped.append(sorted(current_line, key=lambda r: r[0]))
+
+    sorted_rects = [item for group in grouped for item in group]
+    return sorted_rects
 
 def writeFile(realCoords):
-    # open file
+    # เรียงลำดับก่อนเซฟ
+    sorted_realCoords = smart_sort(realCoords, line_threshold=0.005)
+
     currentTime = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     targetPath = f"./generateElement/boxPointer-{currentTime}.dat"
+    os.makedirs("generateElement", exist_ok=True)
     with open(targetPath, "wb") as f:
-        # print(realCoords)
-        pickle.dump(realCoords, f)
-        tk.messagebox.showinfo(title = "System", message = f"File written successfully at \n {os.path.abspath(targetPath)}")
-
+        pickle.dump(sorted_realCoords, f)
+    tk.messagebox.showinfo(title="System", message=f"File written successfully at \n {os.path.abspath(targetPath)}")
 
 def uploadTemplate_block(position_x, position_y):
     tk.Label(app, text="Upload empty template", font=font).place(
@@ -245,7 +266,7 @@ def updateColumnDetail_block(position_x, position_y):
 
     saveColData = tk.Button(app, text="save pointer file (.dat)",
                         command=lambda: writeFile(realCoords))
-    saveColData.place(x=position_x + 100, y=position_y + 260)
+    saveColData.place(x=position_x + 100, y=position_y + 150)
     
 
 def setupFormCanva(imgPath):

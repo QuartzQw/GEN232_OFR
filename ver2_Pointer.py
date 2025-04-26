@@ -180,11 +180,38 @@ def updateColName(entry, box, idx):
         realCoords[idx][4], realCoords[idx][5], realCoords[idx][6] = dtype, name, model
         drawAllRect(coords)
 
+def smart_sort(rects, line_threshold=0.002):
+    rects = sorted(rects, key=lambda r: (r[1], r[0]))  # Sort by y first, then x
+    grouped = []
+    current_line = []
+    last_y = None
+
+    for r in rects:
+        if last_y is None or abs(r[1] - last_y) > line_threshold:
+            if current_line:
+                grouped.append(sorted(current_line, key=lambda r: r[0]))  # Sort x inside the row
+            current_line = [r]
+            last_y = r[1]
+        else:
+            current_line.append(r)
+
+    if current_line:
+        grouped.append(sorted(current_line, key=lambda r: r[0]))
+
+    sorted_rects = [item for group in grouped for item in group]
+    return sorted_rects
+
 def writeFile():
     os.makedirs("generateElement", exist_ok=True)
     path = f"generateElement/boxPointer-{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.dat"
+    
+    sorted_pages = []
+    for page in pageRealCoords:
+        sorted_page = smart_sort(page, line_threshold=0.005)
+        sorted_pages.append(sorted_page)
+
     with open(path, "wb") as f:
-        pickle.dump({"pages": pageRealCoords, "sizes": pageSizes}, f)
+        pickle.dump({"pages": sorted_pages, "sizes": pageSizes}, f)
     messagebox.showinfo("Saved", f"Template saved to: {os.path.abspath(path)}")
 
 def setupFormCanva(imgPath):
@@ -239,30 +266,50 @@ def uploadTemplate_block():
     tk.Button(app, text="Load pointer file (.dat)", command=loadPointerFile).place(x=xAuto + 200, y=yAuto + 80)
 
 def tuneParameter_block():
-    tk.Label(app, text="Parameter tuning", font=font).place(x=xAuto, y=yAuto + 120)
-    tk.Label(app, text="block size").place(x=xAuto + 20, y=yAuto + 160)
-    blockSize = tk.Scale(app, from_=3, to=255, length=scaleLength, resolution=2, orient=tk.HORIZONTAL)
+    parameter_frame = tk.Frame(app)
+    parameter_frame.place(x=xAuto, y=yAuto + 120)
+
+    tk.Label(parameter_frame, text="Parameter tuning", font=font).grid(row=0, column=0, columnspan=2, sticky="w")
+
+    # block size
+    tk.Label(parameter_frame, text="block size").grid(row=1, column=0, sticky="e", pady=2)
+    blockSize = tk.Scale(parameter_frame, from_=3, to=255, resolution=2, orient=tk.HORIZONTAL, length=200)
     blockSize.set(141)
-    blockSize.place(x=xAuto + 80, y=yAuto + 140)
+    blockSize.grid(row=1, column=1, padx=5, pady=2)
 
-    tk.Label(app, text="C-value").place(x=xAuto + 20, y=yAuto + 200)
-    cVal = tk.Scale(app, from_=1, to=15, length=scaleLength, resolution=2, orient=tk.HORIZONTAL)
+    # C-value
+    tk.Label(parameter_frame, text="C-value").grid(row=2, column=0, sticky="e", pady=2)
+    cVal = tk.Scale(parameter_frame, from_=1, to=15, resolution=2, orient=tk.HORIZONTAL, length=200)
     cVal.set(5)
-    cVal.place(x=xAuto + 80, y=yAuto + 180)
+    cVal.grid(row=2, column=1, padx=5, pady=2)
 
-    tk.Label(app, text="min. area").place(x=xAuto + 20, y=yAuto + 240)
-    minArea = tk.Scale(app, from_=0, to=1000, length=scaleLength, orient=tk.HORIZONTAL)
+    # min. area
+    tk.Label(parameter_frame, text="min. area").grid(row=3, column=0, sticky="e", pady=2)
+    minArea = tk.Scale(parameter_frame, from_=0, to=1000, orient=tk.HORIZONTAL, length=200)
     minArea.set(153)
-    minArea.place(x=xAuto + 80, y=yAuto + 220)
+    minArea.grid(row=3, column=1, padx=5, pady=2)
 
-    tk.Label(app, text="resolution").place(x=xAuto + 20, y=yAuto + 280)
-    resolution = tk.Scale(app, from_=1, to=8, length=scaleLength, orient=tk.HORIZONTAL)
+    # resolution
+    tk.Label(parameter_frame, text="resolution").grid(row=4, column=0, sticky="e", pady=2)
+    resolution = tk.Scale(parameter_frame, from_=1, to=8, orient=tk.HORIZONTAL, length=200)
     resolution.set(3)
-    resolution.place(x=xAuto + 80, y=yAuto + 260)
+    resolution.grid(row=4, column=1, padx=5, pady=2)
 
-    tk.Button(app, text="Auto detect", command=lambda: autoDetectPress(imgPath=pdfPages[currentPage], imgWidth=formWidth, imgHeight=formHeight, blockSize=blockSize, cVal=cVal, minArea=minArea, resolution=resolution)).place(x=xAuto, y=yAuto + 320)
-    tk.Button(app, text="< Previous", command=lambda: goToPage(-1)).place(x=xAuto + 200, y=yAuto + 320)
-    tk.Button(app, text="Next >", command=lambda: goToPage(1)).place(x=xAuto + 280, y=yAuto + 320)
+    # Buttons
+    btn_frame = tk.Frame(parameter_frame)
+    btn_frame.grid(row=5, column=0, columnspan=2, pady=10)
+
+    tk.Button(btn_frame, text="Auto detect", command=lambda: autoDetectPress(
+        imgPath=pdfPages[currentPage], imgWidth=formWidth, imgHeight=formHeight,
+        blockSize=blockSize, cVal=cVal, minArea=minArea, resolution=resolution
+    )).pack(side="left", padx=5)
+
+    # รวม Previous กับ Next ไว้ด้วยกัน
+    page_nav_frame = tk.Frame(btn_frame)
+    page_nav_frame.pack(side="left", padx=20)
+
+    tk.Button(page_nav_frame, text="< Previous", command=lambda: goToPage(-1)).pack(side="left", padx=(100,2))
+    tk.Button(page_nav_frame, text="Next >", command=lambda: goToPage(1)).pack(side="left", padx=2)
 
 def updateColumnDetail_block():
     global entryColumnBox, dataTypeBox

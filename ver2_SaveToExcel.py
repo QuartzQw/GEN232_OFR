@@ -102,7 +102,7 @@ def process_survey(image_folder, template_file, output_file, offset_map=None, sh
 
     with open(template_file, "rb") as f:
         data = pickle.load(f)
-        template_pages = [list(reversed(p)) for p in data["pages"]]
+        template_pages = data["pages"]  # ไม่ reversed
 
     image_paths = [os.path.join(image_folder, f) for f in os.listdir(image_folder)
                    if f.lower().endswith(('.jpg', '.png', '.jpeg'))]
