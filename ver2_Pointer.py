@@ -207,7 +207,7 @@ def writeFile():
     
     sorted_pages = []
     for page in pageRealCoords:
-        sorted_page = smart_sort(page, line_threshold=0.005)
+        sorted_page = smart_sort(page, line_threshold=0.04)
         sorted_pages.append(sorted_page)
 
     with open(path, "wb") as f:

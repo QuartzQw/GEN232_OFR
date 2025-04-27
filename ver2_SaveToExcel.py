@@ -61,7 +61,7 @@ def classify_handwritten_digits(cropped_image):
     processed = preprocess_image(cropped_image)
     boxes = find_digits(processed)
     if not boxes:
-        return "[no digits]"
+        return ""   #[no digits]
     digits = extract_digits(processed, boxes)
     pred = MODEL_DIGIT.predict(digits)
     return ''.join(str(np.argmax(p)) for p in pred)
@@ -74,7 +74,7 @@ def extract_number_from_image(cropped_image):
 
 def is_checkbox_checked(cropped_image):
     img_np = np.array(cropped_image.convert("L"))
-    _, binary = cv2.threshold(img_np, 125, 255, cv2.THRESH_BINARY_INV)
+    _, binary = cv2.threshold(img_np, 145, 255, cv2.THRESH_BINARY_INV)
     black_pixels = np.sum(binary == 255)
     return 1 if black_pixels > 0.45 * binary.size else 0
 
@@ -94,6 +94,9 @@ def extract_number(filename):
     return int(match.group()) if match else -1
 
 def process_survey(image_folder, template_file, output_file, offset_map=None, show_alert=True, append_excel_path=None):
+    PERMANENT_IMAGE_DIR = "./saved_images"
+    os.makedirs(PERMANENT_IMAGE_DIR, exist_ok=True)
+
     if offset_map is None:
         offset_map = {}
 
@@ -109,11 +112,13 @@ def process_survey(image_folder, template_file, output_file, offset_map=None, sh
     image_paths.sort(key=lambda x: extract_number(os.path.basename(x)))
 
     field_order = []
+    field_type_map = {}
     for page in template_pages:
         for coord in page:
             fname = str(coord[5])
             if fname not in field_order:
                 field_order.append(fname)
+            field_type_map[fname] = coord[4]
 
     results = []
     pages_per_doc = len(template_pages)
@@ -144,7 +149,9 @@ def process_survey(image_folder, template_file, output_file, offset_map=None, sh
                     elif ftype == "number":
                         batch_result[fname] = extract_number_from_image(crop)
                     elif ftype == "imageLink":
-                        batch_result[fname] = crop_and_save_image(crop, coord, temp_img_folder, fname, img_idx).replace("\\", "/")
+                        save_path = os.path.join(PERMANENT_IMAGE_DIR, f"{fname}_{uuid4().hex[:6]}.png")
+                        crop.save(save_path)
+                        batch_result[fname] = save_path.replace("\\", "/")
                 except Exception as e:
                     print(f"[ERROR] Page {page_idx}, Field {coord}: {e}")
         results.append(batch_result)
@@ -167,19 +174,30 @@ def process_survey(image_folder, template_file, output_file, offset_map=None, sh
             cell = f"{get_column_letter(col_idx)}{row_offset}"
             if isinstance(val, str) and os.path.exists(val) and val.lower().endswith(('.jpg', '.png')):
                 try:
-                    img = opxImage(val)
-                    pil_img = PILImage.open(val)
-                    img.height = 18
-                    img.width = int(pil_img.width / pil_img.height * 18)
-                    img.anchor = cell
-                    ws[cell].value = " "
-                    ws[cell].hyperlink = f"file:///{os.path.abspath(val).replace(os.sep, '/')}"
-                    ws.add_image(img)
-                    ws.column_dimensions[get_column_letter(col_idx)].width = round((img.width + 3) / 7)
+                    col_name = df_new.columns[col_idx - 1]
+                    field_type = field_type_map.get(col_name, "")
+
+                    if field_type == "imageLink":
+                        filename = os.path.basename(val)
+                        relative_path = os.path.relpath(val, start=os.path.dirname(output_file))
+                        ws[cell].value = filename
+                        ws[cell].hyperlink = relative_path.replace(os.sep, '/')
+                        ws[cell].style = 'Hyperlink'  # เปลี่ยนเป็นสีฟ้า
+                    else:
+                        img = opxImage(val)
+                        pil_img = PILImage.open(val)
+                        img.height = 18
+                        img.width = int(pil_img.width / pil_img.height * 18)
+                        img.anchor = cell
+                        ws[cell].value = " "
+                        ws.add_image(img)
+                        ws.column_dimensions[get_column_letter(col_idx)].width = round((img.width + 3) / 7)
+
                 except Exception as e:
-                    print(f"Embed fail at {cell}: {e}")
+                    print(f"Embed/link fail at {cell}: {e}")
             else:
                 ws[cell] = val
+
 
     wb.save(output_file)
 
